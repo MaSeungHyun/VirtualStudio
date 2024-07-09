@@ -1,0 +1,33 @@
+.split {
+  display: flex;
+  /* flex-direction: row; */
+}
+.split-v {
+  display: flex;
+  height: 100%;
+  height: calc(100vh - 26px);
+  flex-direction: column;
+}
+
+.gutter {
+  background-color: black;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  transition: all 0.25s;
+}
+
+.gutter:hover {
+  background-color: #00ddff88;
+  filter: brightness(200%);
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+  /* background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg=="); */
+  cursor: col-resize;
+}
+
+.gutter.gutter-vertical {
+  cursor: row-resize;
+}
