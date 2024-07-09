@@ -1,0 +1,33 @@
+.editor_frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.top_left {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 26px);
+  max-height: calc(100vh - 26px);
+}
+
+.right {
+  width: 100%;
+  height: calc(100vh - 26px);
+  max-height: calc(100vh - 26px);
+  /* background-color: #00ffff33; */
+}
+
+.right_top {
+  width: 100%;
+  display: flex;
+  /* background-color: red; */
+}
+
+.right_bottom {
+  position: relative;
+  width: 100%;
+  display: flex;
+  /* background-color: orange; */
+}
