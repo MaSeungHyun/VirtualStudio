@@ -72,8 +72,8 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
           castShadow={true}
         />
 
-        {/* <RenderThreeModel /> */}
-        <mesh
+        <RenderThreeModel />
+        {/* <mesh
           name={"Box"}
           position={[-2.5, 0, 0]}
           onPointerDown={(e) => {
@@ -120,7 +120,7 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
               <meshStandardMaterial color={"#acacac"} />
             </mesh>
           </group>
-        </group>
+        </group> */}
         <Environment
           resolution={256}
           background
