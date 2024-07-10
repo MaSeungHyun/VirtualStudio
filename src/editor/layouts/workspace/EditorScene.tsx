@@ -9,14 +9,17 @@ import {
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { RenderThreeModel } from "../../RenderThreeModel";
+
 import styles from "./css/EditorScene.module.css";
 import { Controls } from "./Controls";
 import { Scene } from "three";
+import RenderThreeModel from "../../RenderThreeModel";
+import LoadRenderModel from "../../LoadRenderModel";
 
 interface EditorSceneProps {
   setScene: Dispatch<SetStateAction<Scene | null>>;
 }
+
 export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
   const [select, setSelect] = useState("");
   const [gridConfig, setGridConfig] = useState<GridMaterialType>({
@@ -56,13 +59,12 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
           console.log(state.scene.children);
         }}
         shadows={true}
+        onPointerMissed={() => {
+          setSelect(null);
+        }}
       >
         <Controls select={select} />
-        {/* <Grid name="grid" {...gridConfig} /> */}
-        {/* <PerspectiveCamera name={"camera"} /> */}
-
-        {/* <Sky name={"Sky"} sunPosition={[1, 1, 3]} /> */}
-        {/* <RenderThreeModel /> */}
+        <Grid name="grid" {...gridConfig} />
 
         <directionalLight
           name={"DirectionalLight"}
@@ -72,60 +74,13 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
           castShadow={true}
         />
 
-        <RenderThreeModel />
-        {/* <mesh
-          name={"Box"}
-          position={[-2.5, 0, 0]}
-          onPointerDown={(e) => {
-            setSelect("Box");
-          }}
-          castShadow={true}
-        >
-          <boxGeometry args={[2, 2, 2]} />
-          <meshStandardMaterial color={"#acacac"} metalness={0.1} />
-        </mesh>
-        <mesh
-          name={"Sphere"}
-          position={[2.5, 0, 0]}
-          onPointerDown={(e) => {
-            setSelect("Box");
-          }}
-          castShadow={true}
-        >
-          <sphereGeometry args={[1, 32, 16]} />
-          <meshStandardMaterial color={"#acacac"} />
-        </mesh>
-        <group name={"Group1"} castShadow={true}>
-          <mesh
-            name={"Capsule"}
-            position={[0, 0, 0]}
-            onPointerDown={(e) => {
-              setSelect("Box");
-            }}
-            castShadow={true}
-          >
-            <capsuleGeometry args={[1, 1, 8, 16]} />
-            <meshStandardMaterial color={"#acacac"} />
-          </mesh>
-          <group name={"Group2"} castShadow={true}>
-            <mesh
-              name={"Cone"}
-              position={[0, 0, -2]}
-              onPointerDown={(e) => {
-                setSelect("Box");
-              }}
-              castShadow={true}
-            >
-              <coneGeometry args={[1, 2, 33]} />
-              <meshStandardMaterial color={"#acacac"} />
-            </mesh>
-          </group>
-        </group> */}
+        <LoadRenderModel scale={1} setSelect={setSelect} />
+
         <Environment
           resolution={256}
           background
           blur={1}
-          files={"/src/assets/sky2.hdr"}
+          files={"/src/assets/sky.hdr"}
         ></Environment>
       </Canvas>
     </div>

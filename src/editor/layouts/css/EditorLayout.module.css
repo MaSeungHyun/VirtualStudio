@@ -13,7 +13,7 @@
 }
 
 .right {
-  width: 100%;
+  /* width: 100%; */
   height: calc(100vh - 26px);
   max-height: calc(100vh - 26px);
   /* background-color: #00ffff33; */

@@ -1,0 +1,124 @@
+{
+  "hash": "93572213",
+  "configHash": "6b49e296",
+  "lockfileHash": "50769a16",
+  "browserHash": "b1de986c",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "b37911a3",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "1066d60e",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "821a94fd",
+      "needsInterop": true
+    },
+    "react-split": {
+      "src": "../../node_modules/react-split/dist/react-split.es.js",
+      "file": "react-split.js",
+      "fileHash": "ea9bf0c7",
+      "needsInterop": false
+    },
+    "@mui/icons-material/AccountTreeOutlined": {
+      "src": "../../node_modules/@mui/icons-material/AccountTreeOutlined.js",
+      "file": "@mui_icons-material_AccountTreeOutlined.js",
+      "fileHash": "6228810f",
+      "needsInterop": true
+    },
+    "@mui/icons-material/Folder": {
+      "src": "../../node_modules/@mui/icons-material/Folder.js",
+      "file": "@mui_icons-material_Folder.js",
+      "fileHash": "26c3a9ac",
+      "needsInterop": true
+    },
+    "@mui/icons-material/Timeline": {
+      "src": "../../node_modules/@mui/icons-material/Timeline.js",
+      "file": "@mui_icons-material_Timeline.js",
+      "fileHash": "d1267d67",
+      "needsInterop": true
+    },
+    "@mui/icons-material/Terminal": {
+      "src": "../../node_modules/@mui/icons-material/Terminal.js",
+      "file": "@mui_icons-material_Terminal.js",
+      "fileHash": "1fe3f433",
+      "needsInterop": true
+    },
+    "@mui/icons-material/BuildRounded": {
+      "src": "../../node_modules/@mui/icons-material/BuildRounded.js",
+      "file": "@mui_icons-material_BuildRounded.js",
+      "fileHash": "8a6d73d1",
+      "needsInterop": true
+    },
+    "@react-three/drei": {
+      "src": "../../node_modules/@react-three/drei/index.js",
+      "file": "@react-three_drei.js",
+      "fileHash": "fedb9c8a",
+      "needsInterop": false
+    },
+    "@react-three/fiber": {
+      "src": "../../node_modules/@react-three/fiber/dist/react-three-fiber.esm.js",
+      "file": "@react-three_fiber.js",
+      "fileHash": "ef5f2e6c",
+      "needsInterop": false
+    },
+    "three/examples/jsm/Addons.js": {
+      "src": "../../node_modules/three/examples/jsm/Addons.js",
+      "file": "three_examples_jsm_Addons__js.js",
+      "fileHash": "7548e827",
+      "needsInterop": false
+    },
+    "three/examples/jsm/loaders/GLTFLoader": {
+      "src": "../../node_modules/three/examples/jsm/loaders/GLTFLoader.js",
+      "file": "three_examples_jsm_loaders_GLTFLoader.js",
+      "fileHash": "e842f8da",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-IKCYIHQT": {
+      "file": "chunk-IKCYIHQT.js"
+    },
+    "hls-M772F2A4": {
+      "file": "hls-M772F2A4.js"
+    },
+    "vision_bundle-7IQ2RGA2": {
+      "file": "vision_bundle-7IQ2RGA2.js"
+    },
+    "chunk-32KHHKRY": {
+      "file": "chunk-32KHHKRY.js"
+    },
+    "chunk-F2CI3D5K": {
+      "file": "chunk-F2CI3D5K.js"
+    },
+    "chunk-PWRYMSR6": {
+      "file": "chunk-PWRYMSR6.js"
+    },
+    "chunk-CVROIROL": {
+      "file": "chunk-CVROIROL.js"
+    },
+    "chunk-5FH4KILI": {
+      "file": "chunk-5FH4KILI.js"
+    },
+    "chunk-32NEGIXE": {
+      "file": "chunk-32NEGIXE.js"
+    },
+    "chunk-DQROLGKX": {
+      "file": "chunk-DQROLGKX.js"
+    },
+    "chunk-65KY755N": {
+      "file": "chunk-65KY755N.js"
+    },
+    "chunk-V4OQ3NZ2": {
+      "file": "chunk-V4OQ3NZ2.js"
+    }
+  }
+}
