@@ -1,6 +1,8 @@
 import {
   Box,
   Environment,
+  GizmoHelper,
+  GizmoViewport,
   Grid,
   GridMaterialType,
   OrbitControls,
@@ -21,7 +23,13 @@ interface EditorSceneProps {
 }
 
 export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
-  const [select, setSelect] = useState("");
+  const [select, setSelect] = useState<string | null>(null);
+  const [cameraConfig, setCameraConfig] = useState({
+    fov: 50,
+    near: 0.1,
+    far: 1000,
+    position: [4, 3, 5],
+  });
   const [gridConfig, setGridConfig] = useState<GridMaterialType>({
     cellSize: 1,
     /** Cell thickness, default: 0.5 */
@@ -35,7 +43,7 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
     /** Section color, default: #2080ff */
     sectionColor: "#aaa",
     /** Follow camera, default: false */
-    // followCamera: true,
+    followCamera: false,
     /** Display the grid infinitely, default: false */
     infiniteGrid: true,
     /** Fade distance, default: 100 */
@@ -56,6 +64,7 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
         }}
         onCreated={(state) => {
           setScene(state.scene);
+          console.log(state);
           console.log(state.scene.children);
         }}
         shadows={true}
@@ -65,17 +74,26 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
       >
         <Controls select={select} />
         <Grid name="grid" {...gridConfig} />
+        <GizmoHelper>
+          <GizmoViewport
+            axisColors={["#ff3d67", "#24ef86", "#1e80ff"]}
+            axisHeadScale={0.9}
+            labelColor="white"
+          />
+        </GizmoHelper>
 
         <directionalLight
           name={"DirectionalLight"}
+          receiveShadow={true}
           intensity={2}
           position={[2, 3, 5]}
           color={"white"}
           castShadow={true}
         />
 
-        <LoadRenderModel scale={1} setSelect={setSelect} />
-
+        <LoadRenderModel scale={0.1} setSelect={setSelect} />
+        {/* <group name={"test"}></group>
+        <Box name={"box1"}></Box> */}
         <Environment
           resolution={256}
           background

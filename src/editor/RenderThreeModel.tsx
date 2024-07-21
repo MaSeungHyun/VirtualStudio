@@ -15,7 +15,6 @@ export default function RenderThreeModel({
 }: RenderThreeModelProps) {
   console.log(node);
   const handleSelect = () => {
-    // setSelect("MacBook_M1_Pro_16_inch");
     setSelect(node.name);
   };
 

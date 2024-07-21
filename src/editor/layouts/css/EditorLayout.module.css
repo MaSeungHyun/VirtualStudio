@@ -21,13 +21,14 @@
 
 .right_top {
   width: 100%;
-  display: flex;
+  /* overflow: hidden; */
+  /* display: flex; */
   /* background-color: red; */
 }
 
 .right_bottom {
   position: relative;
   width: 100%;
-  display: flex;
+  /* display: flex; */
   /* background-color: orange; */
 }
