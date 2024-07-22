@@ -1,69 +1,45 @@
-.nodeFrame {
-  width: 100%;
-  height: 24px;
-  max-height: 24px;
-
-  /* background-color: #00ccffcc; */
-}
-
-.nodeBox {
-  width: 100%;
-  height: 24px;
-  max-height: 24px;
-  font-size: 0.9rem;
-  display: flex;
+.evenNode {
+  display: block;
   align-items: center;
+  background-color: #2e2e2e;
   cursor: pointer;
 }
 
 .oddNode {
-  width: 100%;
-  height: 24px;
-  max-height: 24px;
-  font-size: 0.9rem;
-  display: flex;
+  display: block;
   align-items: center;
+  background-color: #202020;
   cursor: pointer;
-  background-color: #252525;
-  border-width: 0px 0px 1px 0px;
-  border-style: solid;
-  border-color: black;
 }
 
-.evenNode {
-  width: 100%;
-  height: 24px;
-  max-height: 24px;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  background-color: #2a2a2a;
-  border-width: 0px 0px 1px 0px;
-  border-style: solid;
-  border-color: black;
+.node {
+  height: 26px;
+  max-height: 26px;
+  /* text-overflow: ellipsis; */
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.oddNode:hover {
+.node:hover {
   background-color: #454545;
 }
-.evenNode:hover {
-  background-color: #454545;
-}
-
-.nodeIcon {
-  position: relative;
-  margin-right: 0.6rem;
+.nodeForward {
+  display: inline-flex;
   align-items: center;
+  min-width: 40px;
+  height: 26px;
 }
 
 .nodeName {
-  display: flex;
+  display: inline-block;
   align-items: center;
+  height: 26px;
+  max-height: 26px;
 }
 
 .indicator {
   position: relative;
+
   width: 8px;
   height: 8px;
 

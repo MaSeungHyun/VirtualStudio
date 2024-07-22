@@ -1,6 +1,8 @@
 import {
   Box,
   Environment,
+  GizmoHelper,
+  GizmoViewport,
   Grid,
   GridMaterialType,
   OrbitControls,
@@ -9,16 +11,25 @@ import {
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { RenderThreeModel } from "../../RenderThreeModel";
+
 import styles from "./css/EditorScene.module.css";
 import { Controls } from "./Controls";
 import { Scene } from "three";
+import RenderThreeModel from "../../RenderThreeModel";
+import LoadRenderModel from "../../LoadRenderModel";
 
 interface EditorSceneProps {
   setScene: Dispatch<SetStateAction<Scene | null>>;
 }
+
 export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
-  const [select, setSelect] = useState("");
+  const [select, setSelect] = useState<string | null>(null);
+  const [cameraConfig, setCameraConfig] = useState({
+    fov: 50,
+    near: 0.1,
+    far: 1000,
+    position: [4, 3, 5],
+  });
   const [gridConfig, setGridConfig] = useState<GridMaterialType>({
     cellSize: 1,
     /** Cell thickness, default: 0.5 */
@@ -32,7 +43,7 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
     /** Section color, default: #2080ff */
     sectionColor: "#aaa",
     /** Follow camera, default: false */
-    // followCamera: true,
+    followCamera: false,
     /** Display the grid infinitely, default: false */
     infiniteGrid: true,
     /** Fade distance, default: 100 */
@@ -53,79 +64,41 @@ export const EditorScene: FC<EditorSceneProps> = ({ setScene }) => {
         }}
         onCreated={(state) => {
           setScene(state.scene);
+          console.log(state);
           console.log(state.scene.children);
         }}
         shadows={true}
+        onPointerMissed={() => {
+          setSelect(null);
+        }}
       >
         <Controls select={select} />
-        {/* <Grid name="grid" {...gridConfig} /> */}
-        {/* <PerspectiveCamera name={"camera"} /> */}
-
-        {/* <Sky name={"Sky"} sunPosition={[1, 1, 3]} /> */}
-        {/* <RenderThreeModel /> */}
+        <Grid name="grid" {...gridConfig} />
+        <GizmoHelper>
+          <GizmoViewport
+            axisColors={["#ff3d67", "#24ef86", "#1e80ff"]}
+            axisHeadScale={0.9}
+            labelColor="white"
+          />
+        </GizmoHelper>
 
         <directionalLight
           name={"DirectionalLight"}
+          receiveShadow={true}
           intensity={2}
           position={[2, 3, 5]}
           color={"white"}
           castShadow={true}
         />
 
-        <RenderThreeModel />
-        {/* <mesh
-          name={"Box"}
-          position={[-2.5, 0, 0]}
-          onPointerDown={(e) => {
-            setSelect("Box");
-          }}
-          castShadow={true}
-        >
-          <boxGeometry args={[2, 2, 2]} />
-          <meshStandardMaterial color={"#acacac"} metalness={0.1} />
-        </mesh>
-        <mesh
-          name={"Sphere"}
-          position={[2.5, 0, 0]}
-          onPointerDown={(e) => {
-            setSelect("Box");
-          }}
-          castShadow={true}
-        >
-          <sphereGeometry args={[1, 32, 16]} />
-          <meshStandardMaterial color={"#acacac"} />
-        </mesh>
-        <group name={"Group1"} castShadow={true}>
-          <mesh
-            name={"Capsule"}
-            position={[0, 0, 0]}
-            onPointerDown={(e) => {
-              setSelect("Box");
-            }}
-            castShadow={true}
-          >
-            <capsuleGeometry args={[1, 1, 8, 16]} />
-            <meshStandardMaterial color={"#acacac"} />
-          </mesh>
-          <group name={"Group2"} castShadow={true}>
-            <mesh
-              name={"Cone"}
-              position={[0, 0, -2]}
-              onPointerDown={(e) => {
-                setSelect("Box");
-              }}
-              castShadow={true}
-            >
-              <coneGeometry args={[1, 2, 33]} />
-              <meshStandardMaterial color={"#acacac"} />
-            </mesh>
-          </group>
-        </group> */}
+        <LoadRenderModel scale={0.1} setSelect={setSelect} />
+        {/* <group name={"test"}></group>
+        <Box name={"box1"}></Box> */}
         <Environment
           resolution={256}
           background
           blur={1}
-          files={"/src/assets/sky2.hdr"}
+          files={"/src/assets/sky.hdr"}
         ></Environment>
       </Canvas>
     </div>
