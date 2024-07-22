@@ -35,21 +35,21 @@ export const HierachyPanel: FC<HierachyPanelProps> = ({ scene }) => {
               />
               <div className={styles.indicator} />
             </div>
-            <div className={styles.nodeName}>Scene dasdsdfsddsfdsdsfs</div>
+            <div className={styles.nodeName}>Scene</div>
+            {open &&
+              scene?.children.map((child, index) => {
+                if (child.name !== "grid" && child.name !== "Sky") {
+                  return (
+                    <HierachyNode
+                      key={`${child.uuid}${index}`}
+                      node={child}
+                      depth={depth.current}
+                      index={index + 1}
+                    />
+                  );
+                }
+              })}
           </div>
-          {open &&
-            scene?.children.map((child, index) => {
-              if (child.name !== "grid" && child.name !== "Sky") {
-                return (
-                  <HierachyNode
-                    key={`${child.uuid}${index}`}
-                    node={child}
-                    depth={depth.current}
-                    index={index + 1}
-                  />
-                );
-              }
-            })}
         </div>
       </div>
     </div>

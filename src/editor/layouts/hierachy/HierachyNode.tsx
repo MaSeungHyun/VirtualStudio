@@ -4,6 +4,7 @@ import { FC, MutableRefObject, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { Visibility } from "@mui/icons-material";
 
 interface HierachyNodeProps {
   node: Object3D | Mesh | Group | Light | Camera;
@@ -20,24 +21,22 @@ export const HierachyNode: FC<HierachyNodeProps> = ({ node, depth, index }) => {
   };
 
   return (
-    <>
-      <div className={index % 2 === 1 ? styles.oddNode : styles.evenNode}>
-        <div className={styles.node} style={{ paddingLeft: `${depth}rem` }}>
-          <div className={styles.nodeForward}>
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              style={{
-                width: "24px",
-                fontSize: "12px",
-                transform: open ? "rotate(90deg)" : "rotate(0deg)",
-                visibility: node.children.length > 0 ? "visible" : "hidden",
-              }}
-              onClick={handleOpen}
-            />
-            <div className={styles.indicator} />
-          </div>
-          <div className={styles.nodeName}>{node.name}</div>
+    <div className={index % 2 === 1 ? styles.oddNode : styles.evenNode}>
+      <div className={styles.node} style={{ paddingLeft: `${depth}rem` }}>
+        <div className={styles.nodeForward}>
+          <FontAwesomeIcon
+            icon={faChevronRight}
+            style={{
+              width: "24px",
+              fontSize: "12px",
+              transform: open ? "rotate(90deg)" : "rotate(0deg)",
+              visibility: node.children.length > 0 ? "visible" : "hidden",
+            }}
+            onClick={handleOpen}
+          />
+          <div className={styles.indicator} />
         </div>
+        <div className={styles.nodeName}>{node.name}</div>
       </div>
       {open &&
         node.children &&
@@ -48,18 +47,13 @@ export const HierachyNode: FC<HierachyNodeProps> = ({ node, depth, index }) => {
               node={child}
               depth={depth + 1}
               index={
-                open
-                  ? child.children.length % 2 === 1
-                    ? depth + 1
-                    : depth + 1
-                  : child.children.length % 2 === 0 &&
-                    child.children.length === 0
-                  ? depth + 1
-                  : depth - 1
+                child.children.length % 2 === 1
+                  ? index + child.children.length
+                  : index + child.children.length + 1
               }
             />
           );
         })}
-    </>
+    </div>
   );
 };
