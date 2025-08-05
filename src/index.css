@@ -66,17 +66,13 @@ body {
 
 .split {
   display: flex;
-  flex-direction: column;
-}
-
-.gutter {
-  background-color: #000;
-  background-repeat: no-repeat;
 }
 
 .gutter {
   /* background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg=="); */
-  cursor: row-resize;
+  background-color: #000;
+  background-repeat: no-repeat;
+   cursor: row-resize;
   z-index: 1;
 }
 
@@ -91,7 +87,6 @@ body {
   /* background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg=="); */
   cursor: col-resize;
 }
-
 
 
 .scroll-bar::-webkit-scrollbar {
