@@ -1,29 +1,41 @@
 import Split from "@/components/Split";
-import Panel from "@/components/Panel";
-import SceneView from "./scene-view";
-import Asset from "../asset";
+import { SceneView } from "./scene-view";
+import { Asset } from "../asset";
 import Hierarchy from "../hierarchy";
-import Inspector from "../inspector";
+import { Inspector } from "../inspector";
+import { create } from "zustand";
+import { Menubar } from "./scene-view/_components/Menubar";
+import { SCENE_VIEW_HEADER_MENU_ITEMS } from "@/constants/menu";
+
+interface SplitStore {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  size: [number, number];
+}
+
+export const useSplitStore = create<SplitStore>((set) => ({
+  open: false,
+  setOpen: (open: boolean) => {
+    set({ open });
+    set({ size: !open ? [100, 0] : [66, 34] });
+  },
+  size: [100, 0],
+}));
 
 export default function SceneEditor() {
+  const { size } = useSplitStore();
+
   return (
-    <div className="flex h-full max-h-screen w-full max-w-full flex-col bg-black">
+    <div className="relative flex h-screen w-screen flex-col bg-black">
+      <Menubar menu={SCENE_VIEW_HEADER_MENU_ITEMS} className="bg-black-500" />
       <Split size={[80, 20]} direction="horizontal">
-        <Split size={[100, 0]} direction="vertical">
-          <Panel>
-            <SceneView />
-          </Panel>
-          <Panel>
-            <Asset />
-          </Panel>
+        <Split minSize={32} expandToMin={false} size={size} direction="vertical">
+          <SceneView />
+          <Asset />
         </Split>
         <Split size={[35, 65]} direction="vertical">
-          <Panel>
-            <Hierarchy />
-          </Panel>
-          <Panel className="pt-0">
-            <Inspector />
-          </Panel>
+          <Hierarchy />
+          <Inspector />
         </Split>
       </Split>
     </div>
