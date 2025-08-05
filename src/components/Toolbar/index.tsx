@@ -11,7 +11,7 @@ function ToolbarContainer({ className, children, ...props }: ToolMenuProps) {
   return (
     <div
       className={cn(
-        "bg-black-500 text-text-primary relative flex h-[1.8rem] w-full items-center rounded-t-md border-b-2 border-black px-1",
+        "bg-black-500 text-text-primary relative flex h-[1.6rem] w-full items-center rounded-t-md border-b-2 border-black px-1",
         className,
       )}
       {...props}
