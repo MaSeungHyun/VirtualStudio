@@ -37,6 +37,7 @@ function createWindow() {
     },
     width: DEFAULT_WINDOW_WIDTH,
     height: DEFAULT_WINDOW_HEIGHT,
+    autoHideMenuBar: true,
   });
 
   // Test active push message to Renderer-process.
