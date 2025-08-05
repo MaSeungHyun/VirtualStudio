@@ -41,6 +41,8 @@ body {
 
   --color-green-500: #658A32;
 
+  --color-blue-100: #55C2FF;
+  --color-blue-200: #76A9E8;
   --color-blue-300: #529CEA;
   --color-blue-400: #3A6FC7;
   --color-blue-500: #3462AD;
@@ -64,13 +66,24 @@ body {
 
 .split {
   display: flex;
+  flex-direction: column;
 }
 
 .gutter {
-  /* background-color: #111114; */
-  background-color: 000;
+  background-color: #000;
   background-repeat: no-repeat;
-  background-position: 50%;
+}
+
+.gutter {
+  /* background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg=="); */
+  cursor: row-resize;
+  z-index: 1;
+}
+
+.gutter:hover {
+  /* background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg=="); */
+  background-color: var(--color-blue-100);
+  transition: background-color 0.25s ease-in-out;
 }
 
 
@@ -79,10 +92,7 @@ body {
   cursor: col-resize;
 }
 
-.gutter.gutter-verical:hover {
-  /* background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg=="); */
-  cursor: row-resize;
-}
+
 
 .scroll-bar::-webkit-scrollbar {
   width: 10px;
