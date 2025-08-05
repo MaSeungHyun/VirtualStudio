@@ -289,7 +289,6 @@ export class Scene extends THREE.Scene {
   public change2DView = () => {
     const context = Context.getInstance();
     if (this._camera instanceof THREE.OrthographicCamera) {
-      console.log("orth");
       new JEASINGS.JEasing(this._camera.position)
         .to(
           {
@@ -309,12 +308,10 @@ export class Scene extends THREE.Scene {
 
       this._is2DView = false;
     } else if (this._camera instanceof THREE.PerspectiveCamera) {
-      console.log("pers");
       new JEASINGS.JEasing(this._camera.position)
         .to({ x: 0, y: 0, z: 10 }, 1.5)
         .easing(JEASINGS.Quadratic.Out)
         .onComplete(() => {
-          console.log("완");
           this._camera = this._orthographicCamera;
           context.updateControls(this._orthographicCamera);
           this._is2DView = true;
