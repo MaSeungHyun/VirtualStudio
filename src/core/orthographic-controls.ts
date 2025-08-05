@@ -28,16 +28,8 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
   private domElement: HTMLElement;
   // touch
   private prevDistance: number | null = null;
-  private touches = [
-    new THREE.Vector3(),
-    new THREE.Vector3(),
-    new THREE.Vector3(),
-  ];
-  private prevTouches = [
-    new THREE.Vector3(),
-    new THREE.Vector3(),
-    new THREE.Vector3(),
-  ];
+  private touches = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+  private prevTouches = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
 
   constructor(camera: THREE.OrthographicCamera, domElement: HTMLElement) {
     super();
@@ -67,7 +59,6 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
     if (this.enabled === false) return;
     let distance: number;
     this.box.setFromObject(target, false);
-    console.log("focus box : ", this.box);
 
     if (this.box.isEmpty() === false) {
       this.box.getCenter(this.center);
@@ -96,7 +87,7 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
     delta.applyMatrix3(this.normalMatrix.getNormalMatrix(this.camera.matrix));
 
     this.camera.position.add(delta);
-    console.log(this.camera.position);
+
     this.center.add(delta);
     this.dispatchEvent({ type: "change" });
   }
@@ -104,10 +95,7 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
   private zoom(delta: THREE.Vector3): void {
     if (this.enabled === false) return;
     const zoomChange = delta.z < 0 ? 0.008 : -0.008;
-    this.camera.zoom = Math.max(
-      0.02,
-      Math.min(0.9, this.camera.zoom + zoomChange)
-    );
+    this.camera.zoom = Math.max(0.02, Math.min(0.9, this.camera.zoom + zoomChange));
     this.camera.updateProjectionMatrix();
     this.dispatchEvent({ type: "change" });
   }
@@ -118,14 +106,8 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
 
     if (this.pointers.length === 0) {
       this.domElement.setPointerCapture(event.pointerId);
-      this.domElement.ownerDocument.addEventListener(
-        "pointermove",
-        this.onPointerMove
-      );
-      this.domElement.ownerDocument.addEventListener(
-        "pointerup",
-        this.onPointerUp
-      );
+      this.domElement.ownerDocument.addEventListener("pointermove", this.onPointerMove);
+      this.domElement.ownerDocument.addEventListener("pointerup", this.onPointerUp);
     }
 
     if (this.isTrackingPointer(event)) return;
@@ -153,14 +135,8 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
       case 0:
         this.domElement.releasePointerCapture(event.pointerId);
 
-        this.domElement.ownerDocument.removeEventListener(
-          "pointermove",
-          this.onPointerMove
-        );
-        this.domElement.ownerDocument.removeEventListener(
-          "pointerup",
-          this.onPointerUp
-        );
+        this.domElement.ownerDocument.removeEventListener("pointermove", this.onPointerMove);
+        this.domElement.ownerDocument.removeEventListener("pointerup", this.onPointerUp);
 
         break;
 
@@ -198,7 +174,6 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
     const movementX = this.pointer.x - this.pointerOld.x;
     const movementY = this.pointer.y - this.pointerOld.y;
 
-    console.log(this);
     if (this.state === this.STATE.ZOOM) {
       this.zoom(this.delta.set(0, 0, movementY));
     } else if (this.state === this.STATE.PAN) {
@@ -216,7 +191,7 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
     // event.preventDefault();
 
     // Normalize deltaY due to https://bugzilla.mozilla.org/show_bug.cgi?id=1392460
-    console.log(this);
+
     this.zoom(this.delta.set(0, 0, event.deltaY > 0 ? 1 : -1));
   }
   private contextmenu(event: MouseEvent): void {
@@ -243,23 +218,15 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
 
     switch (this.pointers.length) {
       case 1:
-        this.touches[0]
-          .set(event.pageX, event.pageY, 0)
-          .divideScalar(window.devicePixelRatio);
-        this.touches[1]
-          .set(event.pageX, event.pageY, 0)
-          .divideScalar(window.devicePixelRatio);
+        this.touches[0].set(event.pageX, event.pageY, 0).divideScalar(window.devicePixelRatio);
+        this.touches[1].set(event.pageX, event.pageY, 0).divideScalar(window.devicePixelRatio);
         break;
 
       case 2: {
         const position = this.getSecondPointerPosition(event);
 
-        this.touches[0]
-          .set(event.pageX, event.pageY, 0)
-          .divideScalar(window.devicePixelRatio);
-        this.touches[1]
-          .set(position.x, position.y, 0)
-          .divideScalar(window.devicePixelRatio);
+        this.touches[0].set(event.pageX, event.pageY, 0).divideScalar(window.devicePixelRatio);
+        this.touches[1].set(position.x, position.y, 0).divideScalar(window.devicePixelRatio);
         this.prevDistance = this.touches[0].distanceTo(this.touches[1]);
         break;
       }
@@ -276,8 +243,7 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
       let closest = touches[0];
 
       for (const touch2 of touches) {
-        if (closest.distanceTo(touch) > touch2.distanceTo(touch))
-          closest = touch2;
+        if (closest.distanceTo(touch) > touch2.distanceTo(touch)) closest = touch2;
       }
 
       return closest;
@@ -285,33 +251,21 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
 
     switch (this.pointers.length) {
       case 1:
-        this.touches[0]
-          .set(event.pageX, event.pageY, 0)
-          .divideScalar(window.devicePixelRatio);
-        this.touches[1]
-          .set(event.pageX, event.pageY, 0)
-          .divideScalar(window.devicePixelRatio);
+        this.touches[0].set(event.pageX, event.pageY, 0).divideScalar(window.devicePixelRatio);
+        this.touches[1].set(event.pageX, event.pageY, 0).divideScalar(window.devicePixelRatio);
         break;
 
       case 2: {
         const position = this.getSecondPointerPosition(event);
 
-        this.touches[0]
-          .set(event.pageX, event.pageY, 0)
-          .divideScalar(window.devicePixelRatio);
-        this.touches[1]
-          .set(position.x, position.y, 0)
-          .divideScalar(window.devicePixelRatio);
+        this.touches[0].set(event.pageX, event.pageY, 0).divideScalar(window.devicePixelRatio);
+        this.touches[1].set(position.x, position.y, 0).divideScalar(window.devicePixelRatio);
         const distance = this.touches[0].distanceTo(this.touches[1]);
         this.zoom(this.delta.set(0, 0, this.prevDistance ?? 0 - distance));
         this.prevDistance = distance;
 
-        const offset0 = this.touches[0]
-          .clone()
-          .sub(getClosest(this.touches[0], this.prevTouches));
-        const offset1 = this.touches[1]
-          .clone()
-          .sub(getClosest(this.touches[1], this.prevTouches));
+        const offset0 = this.touches[0].clone().sub(getClosest(this.touches[0], this.prevTouches));
+        const offset1 = this.touches[1].clone().sub(getClosest(this.touches[1], this.prevTouches));
         offset0.x = -offset0.x;
         offset1.x = -offset1.x;
 
@@ -358,10 +312,7 @@ export class OrthographicControls extends THREE.EventDispatcher<EditorControlsEv
   }
   private getSecondPointerPosition(event): THREE.Vector2 {
     if (this.enabled === false) return new THREE.Vector2();
-    const pointerId =
-      event.pointerId === this.pointers[0]
-        ? this.pointers[1]
-        : this.pointers[0];
+    const pointerId = event.pointerId === this.pointers[0] ? this.pointers[1] : this.pointers[0];
     return this.pointerPositions[pointerId];
   }
 
