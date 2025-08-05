@@ -2,18 +2,19 @@ import React, { ComponentProps } from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "../../utils/style";
 
-type ToolMenuProps = {
+type ToolMenuProps = ComponentProps<"div"> & {
   className?: string;
   children: React.ReactNode;
 };
 
-function ToolbarContainer({ className, children }: ToolMenuProps) {
+function ToolbarContainer({ className, children, ...props }: ToolMenuProps) {
   return (
     <div
       className={cn(
         "bg-black-500 text-text-primary relative flex h-[1.8rem] w-full items-center rounded-t-md border-b-2 border-black px-1",
         className,
       )}
+      {...props}
     >
       {children}
     </div>
