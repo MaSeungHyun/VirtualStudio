@@ -10,7 +10,7 @@ function SceneViewToolbar() {
   };
 
   return (
-    <Toolbar.Container className="bg-black-700 h-auto pt-[0.1rem]">
+    <Toolbar.Container className="bg-black-700 flex w-full pt-[0.1rem]">
       <div className="flex items-center gap-2">
         <Toolbar.Item shape="rect" size="md">
           <Icon icon="Plus" />

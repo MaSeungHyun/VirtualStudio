@@ -1,15 +1,16 @@
 import { cn } from "@/utils/style";
 import { MenuItem } from "@/constants/menu";
+import { memo } from "react";
 
 interface MenubarProps {
   className?: string;
   menu: MenuItem[];
 }
-export function Menubar({ className, menu }: MenubarProps) {
+export const Menubar = memo(({ className, menu }: MenubarProps) => {
   return (
     <div
       className={cn(
-        `bg-black-300 flex min-h-[1.8rem] w-full overflow-hidden rounded-t-lg py-[0.02rem]`,
+        `bg-black-300 flex min-h-[1.8rem] w-full items-center overflow-hidden rounded-t-lg py-[0.02rem]`,
         className,
       )}
     >
@@ -18,16 +19,16 @@ export function Menubar({ className, menu }: MenubarProps) {
       ))}
     </div>
   );
-}
+});
 
 interface MenubarItemProps {
   item: MenuItem;
 }
 
-function MenubarItem({ item }: MenubarItemProps) {
+export const MenubarItem = memo(({ item }: MenubarItemProps) => {
   return (
     <div className="hover:bg-black-100 flex h-full w-fit items-center rounded-md px-2">
       {item.label}
     </div>
   );
-}
+});
