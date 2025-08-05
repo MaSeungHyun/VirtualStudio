@@ -13,6 +13,7 @@ import {
 import pointerlock from "../assets/controls/pointerlock.svg";
 import { Context } from "./context";
 
+const HALF_IMAGE_SIZE = 15;
 export interface ControlsEvent {
   change: { message?: string };
 }
@@ -60,6 +61,7 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
     // PerspectiveControls.instance = this;
 
     this._controls = new PointerLockControls(camera, dom);
+    this._controls.pointerSpeed = CONTROLS_SPEED / 1000;
     this._dom = dom;
     this.enabled = true;
     this._camera = camera;
@@ -101,12 +103,12 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
     window.addEventListener("keyup", this.onKeyUp);
   }
 
-  public static getInstance(): PerspectiveControls {
-    // if (!PerspectiveControls.instance) {
-    //   throw new Error("Controls must be initialized with camera and dom first");
-    // }
-    // return PerspectiveControls.instance;
-  }
+  // public static getInstance(): PerspectiveControls {
+  // if (!PerspectiveControls.instance) {
+  //   throw new Error("Controls must be initialized with camera and dom first");
+  // }
+  // return PerspectiveControls.instance;
+  // }
 
   public updateCamera(camera: THREE.PerspectiveCamera) {
     this._camera = camera;
@@ -300,8 +302,8 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
       const deltaY = Math.abs(this._dragStart.y - event.clientY);
 
       const rect = this._dom.getBoundingClientRect();
-      this._pointerLockImage.style.top = `${event.clientY - rect.top - 15}px`;
-      this._pointerLockImage.style.left = `${event.clientX - rect.left - 15}px`;
+      this._pointerLockImage.style.top = `${event.clientY - rect.top + HALF_IMAGE_SIZE}px`;
+      this._pointerLockImage.style.left = `${event.clientX - rect.left + HALF_IMAGE_SIZE}px`;
 
       if (deltaX >= MOUSE_MOVE_THRESHOLD || deltaY >= MOUSE_MOVE_THRESHOLD) {
         this._dragging = true;
