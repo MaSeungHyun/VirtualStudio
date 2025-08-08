@@ -16,6 +16,9 @@ import JEASINGS from "jeasings";
 import { CameraTypes } from "../utils/camera";
 import { SCENE_BACKGROUND_COLOR } from "@/constants/color";
 
+import hdr from "@/assets/envMap.jpg";
+import Loader from "./loader";
+
 export class Scene extends THREE.Scene {
   private _sceneGraph: THREE.Object3D[] = [];
   private _sceneHelper: THREE.Scene;
@@ -45,11 +48,20 @@ export class Scene extends THREE.Scene {
     this._sceneGraph = [...this.children];
     this._sceneHelper = new THREE.Scene();
 
+    // this.background = new THREE.Color(0x000000);
     this.name = name;
     this.fog = new THREE.Fog("#1A1E21", 1, 100);
     this._sceneHelper.fog = new THREE.Fog("#1A1E21", 1, 100);
     this.fog = new THREE.Fog(SCENE_BACKGROUND_COLOR, 1, 100);
     this._sceneHelper.fog = new THREE.Fog(SCENE_BACKGROUND_COLOR, 1, 100);
+
+    Loader.getInstance()
+      .loadTexture(hdr)
+      .then((texture) => {
+        this.backgroundRotation.z = (Math.PI / 180) * 180;
+        this.background = texture;
+        this.backgroundIntensity = 0.5;
+      });
 
     this._perspectiveCamera = new THREE.PerspectiveCamera(
       DEFAULT_CAMERA_SPEC.fov,
@@ -212,13 +224,14 @@ export class Scene extends THREE.Scene {
   }
 
   public defaultScene = () => {
-    const camera = new THREE.PerspectiveCamera(50, 1280 / 720, 0.5, 1000);
+    const camera = new THREE.PerspectiveCamera(50, 64 / 24, 0.5, 50);
     camera.name = "Perspective Camera";
     camera.position.set(0, 0, 10);
     camera.lookAt(0, 0, 0);
     this.add(camera);
 
     const cameraHelper = new THREE.CameraHelper(camera);
+
     this.sceneHelper.add(cameraHelper);
 
     const light = new THREE.DirectionalLight(0xffffff, 1.75);

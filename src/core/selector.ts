@@ -39,7 +39,7 @@ export class Selector {
     renderer: THREE.WebGLRenderer,
     camera: THREE.Camera,
     scene: THREE.Scene,
-    dom: HTMLElement
+    dom: HTMLElement,
   ) {
     this._renderer = renderer;
     this._dom = dom;
@@ -52,10 +52,7 @@ export class Selector {
     this._pointerMove = this.onPointerMove.bind(this);
     this._pointerUp = this.onPointerUp.bind(this);
 
-    const renderTarget = new THREE.WebGLRenderTarget(
-      this._dom.clientWidth,
-      this._dom.clientHeight
-    );
+    const renderTarget = new THREE.WebGLRenderTarget(this._dom.clientWidth, this._dom.clientHeight);
 
     // this._composer = new EffectComposer(this._renderer, renderTarget);
     // this._composer.renderer.autoClear = false;
@@ -117,13 +114,10 @@ export class Selector {
       this.box.startPoint.set(
         (event.clientX / rect.width) * 2 - 1,
         -(event.clientY / rect.height) * 2 + 1,
-        0
+        0,
       );
 
-      this._renderer.domElement.addEventListener(
-        "pointermove",
-        this._pointerMove
-      );
+      this._renderer.domElement.addEventListener("pointermove", this._pointerMove);
 
       this._renderer.domElement.addEventListener("pointerup", this._pointerUp);
     }
@@ -137,7 +131,7 @@ export class Selector {
       this.box.endPoint.set(
         ((event.clientX - rect.left) / rect.width) * 2 - 1,
         -((event.clientY - rect.top) / rect.height) * 2 + 1,
-        0
+        0,
       );
 
       // this._outlinePass.selectedObjects = this.box.select();
@@ -153,7 +147,7 @@ export class Selector {
     this.box.endPoint.set(
       ((event.clientX - rect.left) / rect.width) * 2 - 1,
       -((event.clientY - rect.top) / rect.height) * 2 + 1,
-      0
+      0,
     );
     // this._outlinePass.selectedObjects = this.box.select();
 

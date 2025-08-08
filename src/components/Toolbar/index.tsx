@@ -11,7 +11,7 @@ function ToolbarContainer({ className, children, ...props }: ToolMenuProps) {
   return (
     <div
       className={cn(
-        "bg-black-500 text-text-primary relative flex h-[1.6rem] w-full items-center rounded-t-md border-b-2 border-black px-1",
+        "bg-black-300 text-text-primary relative flex h-[1.6rem] w-full items-center rounded-t-md border-b-2 border-black px-1",
         className,
       )}
       {...props}
@@ -26,7 +26,7 @@ function ToolbarGroup({ className, children }: ToolMenuProps) {
 }
 
 const toolMenuVariants = cva(
-  "bg-black-200 hover:bg-blue-300/80 cursor-pointer items-center justify-center flex text-gray-50 p-1 border-1 border-black-500 ",
+  "bg-black-200 hover:bg-blue-300/50 cursor-pointer items-center justify-center flex text-gray-50 p-1 border-1 border-black-500 ",
   {
     variants: {
       shape: {

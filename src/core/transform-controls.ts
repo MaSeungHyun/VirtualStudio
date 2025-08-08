@@ -833,8 +833,6 @@ class TransformControls extends THREE.Controls<ControlsEvent> {
         const { index } = originalData;
         const currentIndex = parent.children.indexOf(child);
         if (index !== currentIndex && index < parent.children.length) {
-          console.log(child.rotation.x, child.rotation.y, child.rotation.z);
-          console.log(child.scale.x, child.scale.y, child.scale.z);
           parent.children.splice(currentIndex, 1);
           parent.children.splice(index, 0, child);
         }

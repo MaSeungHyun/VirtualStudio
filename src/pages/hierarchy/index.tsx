@@ -15,11 +15,6 @@ const variants = {
   odd: "bg-black-100",
 };
 
-interface HierarchyProps extends ComponentProps<"div"> {
-  className?: string;
-  scenes: Scene[];
-}
-
 export const Hierarchy = memo(() => {
   let count = 0;
   const depth = -1;
@@ -115,8 +110,8 @@ export const Hierarchy = memo(() => {
 
   return (
     <Panel>
-      <div className="bg-black-300 flex h-full max-h-full w-full min-w-full flex-col overflow-hidden rounded-t-lg">
-        <Toolbar.Container className="bg-black-500 justify-between px-[0.5rem]">
+      <div className="flex h-full max-h-full w-full min-w-full flex-col overflow-hidden rounded-t-lg">
+        <Toolbar.Container className="justify-between px-[0.5rem]">
           <div className="flex items-center gap-1">
             <Icon icon="Network" size={12} />
             <p className="relative mt-0.5 text-xs">Hieararchy</p>

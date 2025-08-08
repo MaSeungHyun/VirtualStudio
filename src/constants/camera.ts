@@ -11,8 +11,8 @@ export const DEFAULT_CAMERA_SPEC = {
 // };
 
 export const DEFAULT_CAMERA_POSITION = {
-  x: 6,
-  y: 2.7,
+  x: 8,
+  y: 3.5,
   z: 8,
 };
 
