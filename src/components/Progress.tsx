@@ -24,8 +24,15 @@ export default function Progress({ className, value, ...props }: ProgressProps) 
         {value}%
       </div>
       <ProgressPrimitive.Indicator
-        className="ease-[cubic-bezier(0.65, 0, 0.35, 1)] size-full bg-blue-400 transition-transform"
-        style={{ transform: `translateX(-${100 - value}%)` }}
+        className={cn(
+          "size-full transition-transform duration-1000 ease-in-out",
+          "animate-shimmer bg-gradient-to-r from-sky-500 from-0% via-purple-500 via-50% to-sky-500 bg-[length:200%_100%] saturate-150",
+          `translate-x-[-${100 - value}%]`,
+          className,
+        )}
+        style={{
+          transform: `translateX(-${100 - value}%)`,
+        }}
       />
     </ProgressPrimitive.Root>
   );

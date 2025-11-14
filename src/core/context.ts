@@ -15,6 +15,7 @@ import { OrthographicControls } from "./orthographic-controls";
 import { DEFAULT_CAMERA_SPEC } from "../constants/camera";
 import { ViewHelper } from "./view-helper";
 import JEASINGS from "jeasings";
+import { progress } from "@/store/useProgress";
 
 export class Context {
   private static instance: Context;
@@ -40,16 +41,32 @@ export class Context {
     this._renderer.setClearColor(0x000000, 0);
   }
 
-  public didMount(dom: HTMLDivElement) {
+  public async didMount(dom: HTMLDivElement) {
     console.log("%cMounted SceneView", "color: #00ffff;");
+    const p = progress();
+    p.setTitle("Project Setting")
+      .setDescription("초기 프로젝트 환경을 설정하는 중입니다.")
+      .setIcon("Settings")
+      .open();
 
     this._dom = dom;
+
     const scene = new Scene(`Scene`);
     const scene2 = new Scene(`Scene 2`);
+
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
     this._scenes = [scene, scene2];
     this._scene = scene;
+    p.setProgress(30).setDescription("Scene을 설정하는 중입니다.");
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
     this._cameras = [scene.camera];
     this._camera = scene.camera;
+    p.setProgress(70).setDescription("Camera를 설정하는 중입니다.");
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     // 새로운 DOM 요소로 controls 재생성
     this._persepectiveControls = new PerspectiveControls(
@@ -68,8 +85,11 @@ export class Context {
       this._camera as THREE.PerspectiveCamera | THREE.OrthographicCamera,
       dom,
     );
+    p.setProgress(100).setDescription("Event를 설정하는 중입니다.");
 
     this._renderer.setAnimationLoop(() => this.render());
+
+    p.close();
   }
 
   public static getInstance(): Context {

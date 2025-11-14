@@ -122,6 +122,7 @@ body {
 
   --animate-slideUpAndFade: slideUpAndFade 0.2s ease-in-out;
   
+  --animate-shimmer: shimmer 8s ease-in-out infinite;
 }
 
 
@@ -182,4 +183,13 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

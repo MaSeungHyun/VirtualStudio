@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SceneEditor from "./pages/scene-editor";
+import { ProgressProvider } from "./context/ProgressProvider";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
           <Route path="/" element={<SceneEditor />} />
         </Routes>
       </BrowserRouter>
+      <ProgressProvider />
     </div>
   );
 }
