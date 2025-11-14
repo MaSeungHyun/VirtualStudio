@@ -1,18 +1,17 @@
 import Toolbar from "@/components/Toolbar";
 import Icon from "@/components/Icon";
 import Panel from "@/components/Panel";
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import ObjectInspector from "./object";
-import { Context } from "@/core/context";
+import { useEditor } from "@/hooks/useEditor";
 import TransformInspector from "./transform";
 import * as THREE from "three";
 import Button from "@/components/Button";
 import { Scene } from "@/core/scene";
-import { DropdownMenu } from "@/components/Dropdown";
 import AddComponentDropDown from "./_components/AddComponentDropDown";
 
 export const Inspector = memo(() => {
-  const context = Context.getInstance();
+  const context = useEditor();
   const [selected, setSelected] = useState<THREE.Object3D | null>(null);
   const [scene, setScene] = useState<Scene | null>(null);
 

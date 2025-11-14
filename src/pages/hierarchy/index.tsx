@@ -1,6 +1,6 @@
 import React, { useState, ComponentProps, useEffect, memo, useRef } from "react";
 import * as THREE from "three";
-import { Context } from "@/core/context";
+import { useEditor } from "@/hooks/useEditor";
 import { Scene } from "@/core/scene";
 import { cn } from "@/utils/style";
 import { moveCamera } from "@/utils/camera";
@@ -19,7 +19,7 @@ export const Hierarchy = memo(() => {
   let count = 0;
   const depth = -1;
 
-  const context = Context.getInstance();
+  const context = useEditor();
 
   const hierarchyRef = useRef<HTMLDivElement>(null);
   const [scenes, setScenes] = useState<Scene[]>([]);
@@ -30,8 +30,6 @@ export const Hierarchy = memo(() => {
   );
 
   useEffect(() => {
-    const context = Context.getInstance();
-
     setScenes(context.scenes);
   }, [context.scene]);
 

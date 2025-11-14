@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef } from "react";
-import { Context } from "@/core/context";
+import { useEditor } from "@/hooks/useEditor";
 import { cn } from "@/utils/style";
 import SceneViewToolbar from "./_components/SceneViewToolbar";
 
@@ -8,7 +8,7 @@ import Panel from "@/components/Panel";
 export const SceneView = memo(({ className }: { className?: string }) => {
   const sceneViewRef = useRef<HTMLDivElement>(null);
 
-  const context = Context.getInstance();
+  const context = useEditor();
 
   useEffect(() => {
     if (sceneViewRef.current) {

@@ -16,6 +16,7 @@ import { DEFAULT_CAMERA_SPEC } from "../constants/camera";
 import { ViewHelper } from "./view-helper";
 import JEASINGS from "jeasings";
 import { progress } from "@/store/useProgress";
+import { Selector } from "./selector";
 
 export class Context {
   private static instance: Context;
@@ -35,6 +36,7 @@ export class Context {
   private _transformControls: TransformControls | null = null;
   private _listeners: (() => void)[] = [];
   private _viewHelper: ViewHelper | null = null;
+  private _selector: Selector | null = null;
 
   constructor() {
     console.log("%cInitialize Scene Editor Context", "color: #00ffff;");
@@ -85,6 +87,9 @@ export class Context {
       this._camera as THREE.PerspectiveCamera | THREE.OrthographicCamera,
       dom,
     );
+
+    this._selector = new Selector(this._renderer, this._camera as THREE.Camera, this._scene, dom);
+    this._selector.connect();
     p.setProgress(100).setDescription("Event를 설정하는 중입니다.");
 
     this._renderer.setAnimationLoop(() => this.render());
