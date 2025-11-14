@@ -2,6 +2,8 @@ import Toolbar from "@/components/Toolbar";
 import { useEditor } from "@/hooks/useEditor";
 import Icon from "@/components/Icon";
 import { useState } from "react";
+import { cn } from "@/utils/style";
+import ViewportShadingDropdown from "./ViewportShadingDropdown";
 
 function SceneViewToolbar() {
   const context = useEditor();
@@ -61,11 +63,13 @@ function SceneViewToolbar() {
         <Toolbar.Item shape="rect" size="md" className="w-8">
           <Icon icon="Video" className="h-4 w-4" />
         </Toolbar.Item>
-        <Toolbar.Item shape="rect" size="md" className="w-8">
-          <Icon icon="Grid" className="h-4 w-4" />
-        </Toolbar.Item>
+        <ViewportShadingDropdown>
+          <Toolbar.Item shape="rect" size="md" className="w-8">
+            <Icon icon="Grid" className="h-4 w-4" />
+          </Toolbar.Item>
+        </ViewportShadingDropdown>
         <Toolbar.Item shape="rect" size="md" className="w-8" onClick={handleClickShowHDR}>
-          <Icon icon="Cloud" className="h-4 w-4" />
+          <Icon icon="Cloud" className={cn("h-4 w-4", hdr ? "fill-white" : "fill-transparent")} />
         </Toolbar.Item>
       </Toolbar.Group>
     </Toolbar.Container>

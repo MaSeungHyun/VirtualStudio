@@ -8,7 +8,7 @@ type TransformIconProps = ComponentProps<"svg"> & {
   className?: string;
 };
 
-export default function Icon({ icon, size, className, ...props }: TransformIconProps) {
+export default function Icon({ icon, size = 14, className, ...props }: TransformIconProps) {
   const IconComponent = icons[icon as keyof typeof icons] ?? icons["Box"];
 
   return <IconComponent className={cn(className)} fill={"transparent"} size={size} {...props} />;

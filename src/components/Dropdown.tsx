@@ -19,7 +19,7 @@ const DropdownMenuContent = forwardRef<
     <DropdownPrimitive.Content
       ref={ref}
       className={cn(
-        "bg-gc-black-600 border-gc-gray-800 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-2 min-w-[220px] rounded-md border-1 p-[5px] px-3 text-[#cecece] shadow-lg shadow-black/50 will-change-[opacity,transform]",
+        "bg-black-300 border-gc-gray-800 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade z-2 min-w-[220px] rounded-sm border-1 p-[5px] px-1 text-[#cecece] shadow-lg shadow-black/50 will-change-[opacity,transform]",
         className,
       )}
       {...props}
@@ -35,7 +35,7 @@ const DropdownMenuItem = forwardRef<
   <DropdownPrimitive.Item
     ref={ref}
     className={cn(
-      "group text-violet11 data-[highlighted]:bg-gc-blue-400/30 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-[3px] pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-blue-400/30 hover:text-white data-[disabled]:pointer-events-none data-[highlighted]:text-white",
+      "group text-violet11 data-[highlighted]:bg-gc-blue-400/30 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-sm pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-blue-400/30 hover:text-white data-[disabled]:pointer-events-none data-[highlighted]:text-white",
       className,
     )}
     {...props}
@@ -57,25 +57,7 @@ const DropdownMenuShortcut = forwardRef<
 ));
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
-const DropdownMenuTrigger = forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.SubTrigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.SubTrigger>
->(({ className, children, ...props }, ref) => (
-  <DropdownPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "group text-violet11 data-[highlighted]:bg-violet9 data-[highlighted]:data-[state=open]:bg-violet9 data-[state=open]:bg-violet4 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-[3px] pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-blue-400/30 data-[disabled]:pointer-events-none data-[highlighted]:text-white data-[state=open]:bg-blue-400/30 data-[state=open]:text-white data-[highlighted]:data-[state=open]:text-white",
-      className,
-    )}
-    {...props}
-  >
-    {children}
-    <div className="text-mauve11 group-data-[disabled]:text-mauve8 ml-auto pl-5 group-data-[highlighted]:text-white">
-      <Icon icon="ChevronRight" />
-    </div>
-  </DropdownPrimitive.Trigger>
-));
-DropdownMenuTrigger.displayName = DropdownPrimitive.Trigger.displayName;
+const DropdownMenuTrigger = DropdownPrimitive.Trigger;
 
 const DropdownMenuSubTrigger = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.SubTrigger>,
@@ -105,7 +87,7 @@ const DropdownMenuSubContent = forwardRef<
     <DropdownPrimitive.SubContent
       ref={ref}
       className={cn(
-        "bg-gc-black-600 border-gc-gray-800 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade min-w-[220px] rounded-md border-1 p-[5px] px-3 text-[#cecece] shadow-lg shadow-black/50 will-change-[opacity,transform]",
+        "bg-gc-black-600 border-gc-gray-800 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade min-w-[220px] rounded-sm border-1 p-[5px] px-3 text-[#cecece] shadow-lg shadow-black/50 will-change-[opacity,transform]",
         className,
       )}
       {...props}
