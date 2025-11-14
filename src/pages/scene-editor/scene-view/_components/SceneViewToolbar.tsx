@@ -1,14 +1,25 @@
 import Toolbar from "@/components/Toolbar";
-
-import { Context } from "@/core/context";
+import { useEditor } from "@/hooks/useEditor";
 import Icon from "@/components/Icon";
+import { useState } from "react";
 
 function SceneViewToolbar() {
+  const context = useEditor();
+  const [hdr, setHdr] = useState(true);
+
   const handleClickChange2DView = () => {
-    const context = Context.getInstance();
     context.scene!.change2DView();
   };
 
+  const handleClickShowHDR = () => {
+    if (hdr) {
+      context.scene!.hiddenHDR();
+      setHdr(false);
+    } else {
+      context.scene!.showHDR();
+      setHdr(true);
+    }
+  };
   return (
     <Toolbar.Container className="bg-black-700 flex w-full pt-[0.1rem]">
       <div className="flex items-center gap-2">
@@ -52,6 +63,9 @@ function SceneViewToolbar() {
         </Toolbar.Item>
         <Toolbar.Item shape="rect" size="md" className="w-8">
           <Icon icon="Grid" className="h-4 w-4" />
+        </Toolbar.Item>
+        <Toolbar.Item shape="rect" size="md" className="w-8" onClick={handleClickShowHDR}>
+          <Icon icon="Cloud" className="h-4 w-4" />
         </Toolbar.Item>
       </Toolbar.Group>
     </Toolbar.Container>

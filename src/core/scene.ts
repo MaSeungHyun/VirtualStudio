@@ -36,6 +36,8 @@ export class Scene extends THREE.Scene {
 
   private _selectedObject: THREE.Object3D[] = [];
 
+  private _hdrTexture: THREE.Texture | null = null;
+
   private _listener: (() => void)[] = [];
 
   constructor(name: string) {
@@ -59,7 +61,8 @@ export class Scene extends THREE.Scene {
       .loadTexture(hdr)
       .then((texture) => {
         this.backgroundRotation.z = (Math.PI / 180) * 180;
-        this.background = texture;
+        this._hdrTexture = texture;
+        this.background = this._hdrTexture;
         this.backgroundIntensity = 0.5;
       });
 
@@ -245,9 +248,11 @@ export class Scene extends THREE.Scene {
     this._sceneHelper.add(lightHelper);
 
     const box: THREE.Mesh = createMesh("Box") as THREE.Mesh;
-
+    const box2: THREE.Mesh = createMesh("Box") as THREE.Mesh;
+    box.position.set(-1, 0, 0);
+    box2.position.set(1, 0, 0);
     this.add(box);
-
+    this.add(box2);
     light.target = box;
 
     const grid = new Grid(1000, 1000);
@@ -331,6 +336,15 @@ export class Scene extends THREE.Scene {
         })
         .start();
     }
+  };
+
+  public hiddenHDR = () => {
+    // this._hdrTexture = null;
+    this.background = new THREE.Color(SCENE_BACKGROUND_COLOR);
+  };
+
+  public showHDR = () => {
+    this.background = this._hdrTexture;
   };
 
   public dispose = () => {
