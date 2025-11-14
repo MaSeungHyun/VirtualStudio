@@ -11,5 +11,5 @@ export const useSplitStore = create<SplitStore>((set) => ({
     set({ open });
     set({ size: !open ? [100, 0] : [66, 34] });
   },
-  size: [100, 0],
+  size: [66, 34],
 }));

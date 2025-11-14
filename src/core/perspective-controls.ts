@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { Camera } from "three";
 import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
 import {
   CONTROLS_SPEED,
@@ -23,6 +22,9 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
   public enabled: boolean = true;
   private _dom!: HTMLElement;
   private _camera!: THREE.PerspectiveCamera;
+
+  public speed = CONTROLS_SPEED;
+  public pointerSpeed = this.speed / (MICRO_SECOND * 2);
 
   // 키보드 방향 관련 상태 변수
   private _moveForward: boolean = false;
@@ -61,7 +63,7 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
     // PerspectiveControls.instance = this;
 
     this._controls = new PointerLockControls(camera, dom);
-    this._controls.pointerSpeed = CONTROLS_SPEED / 1000;
+    this._controls.pointerSpeed = this.pointerSpeed;
     this._dom = dom;
     this.enabled = true;
     this._camera = camera;

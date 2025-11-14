@@ -13,10 +13,10 @@ export default function SceneEditor() {
   const { size } = useSplitStore();
 
   return (
-    <div className="relative flex h-screen w-screen flex-col bg-black">
+    <div className="relative flex h-screen w-screen flex-col overflow-hidden bg-black">
       <Menubar menu={SCENE_VIEW_HEADER_MENU_ITEMS} className="bg-black-500" />
       <Split size={[80, 20]} direction="horizontal">
-        <Split minSize={28} expandToMin={false} size={size} direction="vertical">
+        <Split minSize={40} expandToMin={false} size={size} direction="vertical">
           <SceneView />
           <Asset />
         </Split>

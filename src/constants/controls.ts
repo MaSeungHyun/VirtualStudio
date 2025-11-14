@@ -1,4 +1,4 @@
-export const CONTROLS_SPEED = 1000;
+export const CONTROLS_SPEED = 1500;
 
 export const PAN_SPEED = 0.01;
 
