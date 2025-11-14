@@ -35,7 +35,7 @@ const DropdownMenuItem = forwardRef<
   <DropdownPrimitive.Item
     ref={ref}
     className={cn(
-      "group text-violet11 data-[highlighted]:bg-gc-blue-400/30 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-sm pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-blue-400/30 hover:text-white data-[disabled]:pointer-events-none data-[highlighted]:text-white",
+      "group text-violet11 data-[highlighted]:bg-gc-blue-400/30 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-sm pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-cyan-400/30 hover:text-white data-[disabled]:pointer-events-none data-[highlighted]:text-white",
       className,
     )}
     {...props}
@@ -66,7 +66,7 @@ const DropdownMenuSubTrigger = forwardRef<
   <DropdownPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      "group text-violet11 data-[highlighted]:bg-violet9 data-[highlighted]:data-[state=open]:bg-violet9 data-[state=open]:bg-violet4 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-[3px] pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-blue-400/30 data-[disabled]:pointer-events-none data-[highlighted]:text-white data-[state=open]:bg-blue-400/30 data-[state=open]:text-white data-[highlighted]:data-[state=open]:text-white",
+      "group text-violet11 data-[highlighted]:bg-violet9 data-[highlighted]:data-[state=open]:bg-violet9 data-[state=open]:bg-violet4 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-[3px] pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-cyan-400/30 data-[disabled]:pointer-events-none data-[highlighted]:text-white data-[state=open]:bg-blue-400/30 data-[state=open]:text-white data-[highlighted]:data-[state=open]:text-white",
       className,
     )}
     {...props}
@@ -115,7 +115,7 @@ const DropdownMenuCheckboxItem = forwardRef<
   <DropdownPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "group text-violet11 data-[highlighted]:bg-gc-blue-400/30 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-[3px] pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-blue-400/30 hover:text-white data-[disabled]:pointer-events-none data-[highlighted]:text-white",
+      "group text-violet11 data-[highlighted]:bg-gc-blue-400/30 data-[disabled]:text-mauve8 data-[disabled]:text-gc-gray-500 relative flex h-[25px] items-center rounded-[3px] pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-cyan-400/30 hover:text-white data-[disabled]:pointer-events-none data-[highlighted]:text-white",
       className,
     )}
     {...props}
@@ -160,7 +160,7 @@ const DropdownMenuRadioItem = forwardRef<
   <DropdownPrimitive.RadioItem
     ref={ref}
     className={cn(
-      "text-violet11 data-[highlighted]:bg-violet9 data-[disabled]:text-mauve8 relative flex h-[25px] items-center rounded-[3px] pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-blue-400/30 hover:text-white data-[disabled]:pointer-events-none data-[highlighted]:text-white",
+      "text-violet11 data-[highlighted]:bg-violet9 data-[disabled]:text-mauve8 relative flex h-[25px] items-center rounded-[3px] pr-[5px] pl-[25px] text-[13px] leading-none outline-none select-none hover:bg-cyan-400/30 hover:text-white data-[disabled]:pointer-events-none data-[highlighted]:text-white",
       className,
     )}
     {...props}

@@ -12,7 +12,7 @@ const iconStyle = "mr-2";
 
 export default function ViewportShadingDropdown({ children }: ViewportShadingDropdownProps) {
   const { scene } = useEditor();
-  const [viewportShading, setViewportShading] = useState<string>("realistic");
+  const [viewportShading, setViewportShading] = useState<string>("solid");
 
   const handleChangeViewportShading = (viewportShading: string) => {
     console.log(scene);
@@ -62,7 +62,10 @@ export default function ViewportShadingDropdown({ children }: ViewportShadingDro
             onClick={() => handleChangeViewportShading("solid")}
           >
             <DropdownMenu.ItemIndicator>
-              <Icon icon="Check" />
+              <Icon
+                icon="Check"
+                className={`stroke-3 ${viewportShading === "solid" ? "text-gc-cyan-100" : "text-transparent"}`}
+              />
             </DropdownMenu.ItemIndicator>
             <Icon icon="Flat" className={iconStyle} /> Solid
           </DropdownMenu.RadioItem>
@@ -71,7 +74,10 @@ export default function ViewportShadingDropdown({ children }: ViewportShadingDro
             onClick={() => handleChangeViewportShading("normals")}
           >
             <DropdownMenu.ItemIndicator>
-              <Icon icon="Check" />
+              <Icon
+                icon="Check"
+                className={`stroke-3 ${viewportShading === "normals" ? "text-gc-cyan-100" : "text-transparent"}`}
+              />
             </DropdownMenu.ItemIndicator>
             <Icon icon="Flat" className={iconStyle} /> Normals
           </DropdownMenu.RadioItem>
@@ -80,7 +86,10 @@ export default function ViewportShadingDropdown({ children }: ViewportShadingDro
             onClick={() => handleChangeViewportShading("wireframe")}
           >
             <DropdownMenu.ItemIndicator>
-              <Icon icon="Check" />
+              <Icon
+                icon="Check"
+                className={`stroke-3 ${viewportShading === "wireframe" ? "text-gc-cyan-100" : "text-transparent"}`}
+              />
             </DropdownMenu.ItemIndicator>
             <Icon icon="Flat" className={iconStyle} /> Shaded
           </DropdownMenu.RadioItem>
