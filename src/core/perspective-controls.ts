@@ -250,7 +250,7 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
     if (this.enabled) {
       if (event.button === MOUSE_LEFT) {
         this._active_pointer_left = true;
-        this.onPointerLeftDown(event);
+        this.onPointerLeftDown();
       } else if (event.button === MOUSE_RIGHT) {
         this._active_pointer_right = true;
         this.onPointerRightDown(event);
@@ -264,7 +264,7 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
   private onPointerMove(event: MouseEvent) {
     if (this.enabled === false) return;
     if (this._active_pointer_left) {
-      this.onPointerLeftMove(event);
+      this.onPointerLeftMove();
     } else if (this._active_pointer_right) {
       this.onPointerRightMove(event);
     } else if (this._active_mouse_wheel) {
@@ -276,7 +276,7 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
     if (this.enabled === false) return;
     if (event.button === MOUSE_LEFT) {
       this._active_pointer_left = false;
-      this.onPointerLeftUp(event);
+      this.onPointerLeftUp();
     } else if (event.button === MOUSE_RIGHT) {
       this._active_pointer_right = false;
       this.onPointerRightUp();
@@ -287,9 +287,9 @@ export class PerspectiveControls extends THREE.EventDispatcher<ControlsEvent> {
   }
   // TODO
   // LEFT BUTTON 이벤트 처리
-  public onPointerLeftDown(event: MouseEvent) {}
-  public onPointerLeftMove(event: MouseEvent) {}
-  public onPointerLeftUp(event: MouseEvent) {
+  public onPointerLeftDown() {}
+  public onPointerLeftMove() {}
+  public onPointerLeftUp() {
     this._active_pointer_left = false;
   }
 
