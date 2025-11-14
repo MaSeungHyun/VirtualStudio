@@ -1,166 +1,166 @@
 import * as THREE from "three";
 import { SelectionBox } from "three/addons/interactive/SelectionBox.js";
-import { SelectionHelper } from "three/addons/interactive/SelectionHelper.js";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
-import { CopyShader } from "three/addons/shaders/CopyShader.js";
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { FXAAShader } from "three/addons/shaders/FXAAShader.js";
 import { MOUSE_LEFT } from "../constants/controls";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
-
-const params = {
-  edgeStrength: 3.0,
-  edgeGlow: 0.0,
-  edgeThickness: 1.0,
-  pulsePeriod: 0,
-  rotate: false,
-  usePatternTexture: false,
-};
+import { Scene } from "./scene";
 
 export class Selector {
   private box: SelectionBox;
-  private helper: SelectionHelper;
   private _renderer: THREE.WebGLRenderer;
   private _dom: HTMLElement;
-  private _scene: THREE.Scene;
+  private _scene: Scene;
   private _camera: THREE.Camera;
-  // private _composer: EffectComposer;
-  // private _renderPass: RenderPass;
-  // private _outlinePass: OutlinePass;
-  // private _active_mouse_left: boolean = false;
+  private _isSelecting: boolean = false;
+  private _startPoint: THREE.Vector2 = new THREE.Vector2();
+  private _selectionBoxElement: HTMLDivElement | null = null;
 
   private _pointerDown: (event: MouseEvent) => void;
   private _pointerMove: (event: MouseEvent) => void;
   private _pointerUp: (event: MouseEvent) => void;
 
-  constructor(
-    renderer: THREE.WebGLRenderer,
-    camera: THREE.Camera,
-    scene: THREE.Scene,
-    dom: HTMLElement,
-  ) {
+  constructor(renderer: THREE.WebGLRenderer, camera: THREE.Camera, scene: Scene, dom: HTMLElement) {
     this._renderer = renderer;
     this._dom = dom;
     this._scene = scene;
     this._camera = camera;
     this.box = new SelectionBox(camera, scene);
-    this.helper = new SelectionHelper(renderer, "selectBox");
 
     this._pointerDown = this.onPointerDown.bind(this);
     this._pointerMove = this.onPointerMove.bind(this);
     this._pointerUp = this.onPointerUp.bind(this);
 
-    const renderTarget = new THREE.WebGLRenderTarget(this._dom.clientWidth, this._dom.clientHeight);
-
-    // this._composer = new EffectComposer(this._renderer, renderTarget);
-    // this._composer.renderer.autoClear = false;
-    // this._renderPass = new RenderPass(this._scene, this._camera);
-    // this._composer.addPass(this._renderPass);
-
-    // this._outlinePass = new OutlinePass(
-    //   new THREE.Vector2(
-    //     this._renderer.domElement.clientWidth,
-    //     this._renderer.domElement.clientHeight
-    //   ),
-    //   this._scene as THREE.Scene,
-    //   this._camera as THREE.Camera
-    // );
-    // this._outlinePass.edgeStrength = 3.0;
-    // this._outlinePass.edgeGlow = 0.1;
-    // this._outlinePass.edgeThickness = 1.0;
-    // this._outlinePass.visibleEdgeColor.set(0x00ced6);
-    // this._composer.addPass(this._outlinePass);
-
-    // const outputPas = new OutputPass();
-    // this._composer.addPass(outputPas);
-
-    // const effectFXAA = new ShaderPass(FXAAShader);
-
-    // effectFXAA.renderToScreen = true;
-
-    // effectFXAA.uniforms["resolution"].value.set(
-    //   1 / this._dom.clientWidth,
-    //   1 / this._dom.clientHeight
-    // );
-
-    // this._composer.addPass(effectFXAA);
-    // this._composer.setSize(this._dom.clientWidth, this._dom.clientHeight);
-
-    // const smaaPass = new SMAAPass(
-    //   this._renderer.domElement.clientWidth,
-    //   this._renderer.domElement.clientHeight
-    // );
-    // this._composer.addPass(smaaPass);
-    this._dom.addEventListener("pointerdown", (event: MouseEvent) => {
-      this._pointerDown(event);
-    });
+    // 선택 박스 DOM 요소 생성
+    this._selectionBoxElement = document.createElement("div");
+    this._selectionBoxElement.className = "selectBox";
+    this._selectionBoxElement.style.cssText = `
+      position: absolute;
+      border: 1px dashed #00ced6;
+      background: rgba(0, 206, 214, 0.1);
+      pointer-events: none;
+      display: none;
+    `;
+    this._dom.appendChild(this._selectionBoxElement);
   }
-
-  // get composer() {
-  // return this._composer;
-  // }
-  // get renderPass() {
-  // return this._renderPass;
-  // }
 
   public onPointerDown(event: MouseEvent) {
     if (event.button === MOUSE_LEFT) {
-      // this._active_mouse_left = true;
-      // this._outlinePass.selectedObjects = [];
-
+      this._isSelecting = true;
       const rect = this._renderer.domElement.getBoundingClientRect();
-      this.box.startPoint.set(
-        (event.clientX / rect.width) * 2 - 1,
-        -(event.clientY / rect.height) * 2 + 1,
-        0,
-      );
+
+      // 시작점 저장 (단일 클릭인지 드래그인지 판단하기 위해)
+      this._startPoint.set(event.clientX, event.clientY);
+
+      // 정규화된 좌표 계산
+      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      this.box.startPoint.set(x, y, 0);
+      this.box.endPoint.set(x, y, 0);
+
+      // 선택 박스 표시
+      if (this._selectionBoxElement) {
+        this._selectionBoxElement.style.display = "block";
+        this._selectionBoxElement.style.left = `${event.clientX - rect.left}px`;
+        this._selectionBoxElement.style.top = `${event.clientY - rect.top}px`;
+        this._selectionBoxElement.style.width = "0px";
+        this._selectionBoxElement.style.height = "0px";
+      }
 
       this._renderer.domElement.addEventListener("pointermove", this._pointerMove);
-
       this._renderer.domElement.addEventListener("pointerup", this._pointerUp);
     }
   }
 
   public onPointerMove(event: MouseEvent) {
-    // console.log(event.button);
-    if (this.helper.isDown) {
-      //   console.log("fasdfad");
+    if (this._isSelecting && this._selectionBoxElement) {
       const rect = this._renderer.domElement.getBoundingClientRect();
-      this.box.endPoint.set(
-        ((event.clientX - rect.left) / rect.width) * 2 - 1,
-        -((event.clientY - rect.top) / rect.height) * 2 + 1,
-        0,
-      );
+      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-      // this._outlinePass.selectedObjects = this.box.select();
-      //   console.log(this._outlinePass.selectedObjects);
-      // this.render();
+      this.box.endPoint.set(x, y, 0);
+
+      // 선택 박스 크기 업데이트
+      const startX = this._startPoint.x - rect.left;
+      const startY = this._startPoint.y - rect.top;
+      const currentX = event.clientX - rect.left;
+      const currentY = event.clientY - rect.top;
+
+      const left = Math.min(startX, currentX);
+      const top = Math.min(startY, currentY);
+      const width = Math.abs(currentX - startX);
+      const height = Math.abs(currentY - startY);
+
+      this._selectionBoxElement.style.left = `${left}px`;
+      this._selectionBoxElement.style.top = `${top}px`;
+      this._selectionBoxElement.style.width = `${width}px`;
+      this._selectionBoxElement.style.height = `${height}px`;
     }
   }
 
   public onPointerUp(event: MouseEvent) {
+    if (!this._isSelecting) return;
+
     event.stopPropagation();
     const rect = this._renderer.domElement.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-    this.box.endPoint.set(
-      ((event.clientX - rect.left) / rect.width) * 2 - 1,
-      -((event.clientY - rect.top) / rect.height) * 2 + 1,
-      0,
+    this.box.endPoint.set(x, y, 0);
+
+    // 선택 박스 숨기기
+    if (this._selectionBoxElement) {
+      this._selectionBoxElement.style.display = "none";
+    }
+
+    // 드래그 거리 계산 (단일 클릭인지 판단)
+    const dragDistance = Math.sqrt(
+      Math.pow(event.clientX - this._startPoint.x, 2) +
+        Math.pow(event.clientY - this._startPoint.y, 2),
     );
-    // this._outlinePass.selectedObjects = this.box.select();
 
-    this._dom.removeEventListener("pointermove", this._pointerMove.bind(this));
+    // 선택된 오브젝트 가져오기
+    const selectedObjects = this.box.select();
+
+    // Scene의 selectedObject에 설정
+    // 드래그가 아니고 선택된 오브젝트가 없으면 선택 해제
+    if (dragDistance < 5 && selectedObjects.length === 0) {
+      // 단일 클릭이고 아무것도 선택되지 않았으면 선택 해제
+      this._scene.selectedObject = [];
+    } else if (selectedObjects.length > 0) {
+      // 선택된 오브젝트가 있으면 설정
+      // Scene이 아닌 오브젝트만 필터링
+      const filteredObjects = selectedObjects.filter(
+        (obj) => !(obj instanceof THREE.Scene),
+      ) as unknown as THREE.Object3D[];
+
+      this._scene.selectedObject = filteredObjects;
+    }
+
+    // 이벤트 리스너 제거
+    this._renderer.domElement.removeEventListener("pointermove", this._pointerMove);
+    this._renderer.domElement.removeEventListener("pointerup", this._pointerUp);
+
+    this._isSelecting = false;
+  }
+
+  public dispose() {
+    if (this._selectionBoxElement && this._selectionBoxElement.parentNode) {
+      this._selectionBoxElement.parentNode.removeChild(this._selectionBoxElement);
+    }
+    this._dom.removeEventListener("pointermove", this._pointerMove);
     this._dom.removeEventListener("pointerup", this._pointerUp);
     this._dom.removeEventListener("pointerdown", this._pointerDown);
   }
 
-  public dispose() {
-    this.helper.dispose();
-    this._dom.removeEventListener("pointermove", this._pointerMove);
-    this._dom.removeEventListener("pointerup", this._pointerUp);
-    this._dom.removeEventListener("pointerdown", this._pointerDown);
+  public connect() {
+    this._dom.addEventListener("pointerdown", (event: MouseEvent) => {
+      this._pointerDown(event);
+    });
+    this._dom.addEventListener("pointermove", (event: MouseEvent) => {
+      this._pointerMove(event);
+    });
+    this._dom.addEventListener("pointerup", (event: MouseEvent) => {
+      this._pointerUp(event);
+    });
   }
 
   // public render() {
