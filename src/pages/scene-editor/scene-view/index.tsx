@@ -1,11 +1,9 @@
 import { memo, useEffect, useRef } from "react";
-import * as THREE from "three";
 import { useEditor } from "@/hooks/useEditor";
 import { cn } from "@/utils/style";
 import SceneViewToolbar from "./_components/SceneViewToolbar";
 
 import Panel from "@/components/Panel";
-import Button from "@/components/Button";
 
 export const SceneView = memo(({ className }: { className?: string }) => {
   const sceneViewRef = useRef<HTMLDivElement>(null);
