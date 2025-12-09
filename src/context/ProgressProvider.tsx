@@ -1,4 +1,4 @@
-import { useProgressStore } from "@/store/useProgress";
+import { useProgressStore } from "@/store/useProgressStore";
 import {
   Dialog,
   DialogContent,

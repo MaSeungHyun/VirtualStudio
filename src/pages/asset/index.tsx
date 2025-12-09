@@ -1,6 +1,6 @@
 import Toolbar from "@/components/Toolbar";
 import Icon from "@/components/Icon";
-import { useSplitStore } from "@/store/useSplit";
+import { useSplitStore } from "@/store/useSplitStore";
 import { memo, useCallback } from "react";
 import Panel from "@/components/Panel";
 

@@ -5,6 +5,7 @@ import { Scene } from "./scene";
 
 export class Selector {
   private box: SelectionBox;
+  private _raycaster: THREE.Raycaster;
   private _renderer: THREE.WebGLRenderer;
   private _dom: HTMLElement;
   private _scene: Scene;
@@ -12,10 +13,16 @@ export class Selector {
   private _isSelecting: boolean = false;
   private _startPoint: THREE.Vector2 = new THREE.Vector2();
   private _selectionBoxElement: HTMLDivElement | null = null;
+  private _selectedOutlineHelpers: Array<{
+    outline: THREE.LineSegments;
+    object: THREE.Mesh;
+  }> = []; // 선택 완료된 오브젝트의 외곽선 (오브젝트 참조 포함)
+  private _outlineColor: THREE.Color = new THREE.Color(0x00ced6); // 시안색
 
   private _pointerDown: (event: MouseEvent) => void;
   private _pointerMove: (event: MouseEvent) => void;
   private _pointerUp: (event: MouseEvent) => void;
+  private _sceneSelectionListener: (() => void) | null = null;
 
   constructor(renderer: THREE.WebGLRenderer, camera: THREE.Camera, scene: Scene, dom: HTMLElement) {
     this._renderer = renderer;
@@ -23,6 +30,7 @@ export class Selector {
     this._scene = scene;
     this._camera = camera;
     this.box = new SelectionBox(camera, scene);
+    this._raycaster = new THREE.Raycaster();
 
     this._pointerDown = this.onPointerDown.bind(this);
     this._pointerMove = this.onPointerMove.bind(this);
@@ -39,10 +47,27 @@ export class Selector {
       display: none;
     `;
     this._dom.appendChild(this._selectionBoxElement);
+
+    // Scene의 selectedObject 변경을 구독하여 외곽선 업데이트
+    this._sceneSelectionListener = () => {
+      this.updateSelectedObjectOutlines();
+    };
+    this._scene.subscribe(this._sceneSelectionListener);
+
+    // 초기 선택된 오브젝트에 외곽선 표시
+    this.updateSelectedObjectOutlines();
   }
 
   public onPointerDown(event: MouseEvent) {
     if (event.button === MOUSE_LEFT) {
+      // TransformControls가 드래그 중이면 선택 비활성화
+      const transformControls = this._scene.transformControls;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (transformControls && (transformControls as any).dragging === true) {
+        // TransformControls가 드래그 중이면 선택 비활성화
+        return;
+      }
+
       this._isSelecting = true;
       const rect = this._renderer.domElement.getBoundingClientRect();
 
@@ -99,6 +124,21 @@ export class Selector {
   public onPointerUp(event: MouseEvent) {
     if (!this._isSelecting) return;
 
+    // TransformControls가 드래그 중이면 선택 비활성화
+    const transformControls = this._scene.transformControls;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (transformControls && (transformControls as any).dragging === true) {
+      this._isSelecting = false;
+      // 선택 박스 숨기기
+      if (this._selectionBoxElement) {
+        this._selectionBoxElement.style.display = "none";
+      }
+      // 이벤트 리스너 제거
+      this._renderer.domElement.removeEventListener("pointermove", this._pointerMove);
+      this._renderer.domElement.removeEventListener("pointerup", this._pointerUp);
+      return;
+    }
+
     event.stopPropagation();
     const rect = this._renderer.domElement.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -117,16 +157,37 @@ export class Selector {
         Math.pow(event.clientY - this._startPoint.y, 2),
     );
 
-    // 선택된 오브젝트 가져오기
-    const selectedObjects = this.box.select();
+    let selectedObjects: THREE.Object3D[] = [];
+
+    // 단일 클릭인 경우 Raycaster 사용 (정확한 단일 오브젝트 선택)
+    if (dragDistance < 5) {
+      // Raycaster로 클릭한 위치의 오브젝트 선택
+      const rect = this._renderer.domElement.getBoundingClientRect();
+      const mouse = new THREE.Vector2();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      this._raycaster.setFromCamera(mouse, this._camera);
+      const intersects = this._raycaster.intersectObjects(this._scene.children, true);
+
+      if (intersects.length > 0) {
+        // 가장 가까운 오브젝트만 선택
+        const firstIntersect = intersects[0].object;
+        // Scene이 아닌 오브젝트만 선택
+        if (!(firstIntersect instanceof THREE.Scene)) {
+          selectedObjects = [firstIntersect] as unknown as THREE.Object3D[];
+        }
+      }
+    } else {
+      // 드래그인 경우 SelectionBox 사용 (여러 오브젝트 선택)
+      selectedObjects = this.box.select() as unknown as THREE.Object3D[];
+    }
 
     // Scene의 selectedObject에 설정
-    // 드래그가 아니고 선택된 오브젝트가 없으면 선택 해제
-    if (dragDistance < 5 && selectedObjects.length === 0) {
-      // 단일 클릭이고 아무것도 선택되지 않았으면 선택 해제
+    if (selectedObjects.length === 0) {
+      // 선택된 오브젝트가 없으면 선택 해제
       this._scene.selectedObject = [];
-    } else if (selectedObjects.length > 0) {
-      // 선택된 오브젝트가 있으면 설정
+    } else {
       // Scene이 아닌 오브젝트만 필터링
       const filteredObjects = selectedObjects.filter(
         (obj) => !(obj instanceof THREE.Scene),
@@ -142,7 +203,85 @@ export class Selector {
     this._isSelecting = false;
   }
 
+  /**
+   * 선택 완료된 오브젝트에 외곽선 추가 (외곽선만, 모든 edge가 아닌)
+   */
+  private updateSelectedObjectOutlines() {
+    // 기존 외곽선 제거
+    this.clearSelectedObjectOutlines();
+
+    // Scene의 selectedObject 가져오기
+    const selectedObjects = this._scene.selectedObject;
+
+    // Mesh 오브젝트만 필터링
+    const meshObjects = selectedObjects.filter((obj) => obj instanceof THREE.Mesh) as THREE.Mesh[];
+
+    // 각 오브젝트에 외곽선 추가 (threshold를 높게 설정하여 외곽선만 표시)
+    meshObjects.forEach((object) => {
+      if (object.geometry) {
+        // threshold를 높게 설정하여 외곽선(두 면이 만나는 각도가 큰 곳)만 표시
+        // 값이 클수록 더 적은 edge만 표시 (외곽선에 가까운 edge만)
+        const edges = new THREE.EdgesGeometry(object.geometry, 30); // 30도 이상 각도인 edge만 표시
+        const outline = new THREE.LineSegments(
+          edges,
+          new THREE.LineBasicMaterial({
+            color: this._outlineColor,
+            linewidth: 2,
+            depthTest: true, // 깊이 테스트 활성화 (오브젝트에 가려질 수 있음)
+            depthWrite: true, // 깊이 버퍼에 쓰지 않음 (다른 오브젝트가 가릴 수 있음)
+          }),
+        );
+
+        // 오브젝트의 world matrix를 사용하여 외곽선의 위치, 회전, 스케일 동기화
+        object.updateMatrixWorld(true);
+        outline.matrix.copy(object.matrixWorld);
+        // 외곽선을 약간 확대하여 오브젝트 외곽에 표시
+        outline.matrix.scale(new THREE.Vector3(1.01, 1.01, 1.01));
+        outline.matrixAutoUpdate = false; // 자동 업데이트 비활성화 (수동으로 동기화)
+
+        // sceneHelper에 추가
+        this._scene.sceneHelper.add(outline);
+        this._selectedOutlineHelpers.push({ outline, object }); // 오브젝트 참조도 저장하여 업데이트 시 사용
+      }
+    });
+  }
+
+  /**
+   * 선택 완료된 오브젝트의 외곽선 제거
+   */
+  private clearSelectedObjectOutlines() {
+    this._selectedOutlineHelpers.forEach(({ outline }) => {
+      // sceneHelper에서 제거
+      if (outline.parent) {
+        outline.parent.remove(outline);
+      }
+      outline.geometry.dispose();
+      if (outline.material instanceof THREE.Material) {
+        outline.material.dispose();
+      }
+    });
+    this._selectedOutlineHelpers = [];
+  }
+
+  /**
+   * 외곽선의 위치를 오브젝트와 동기화 (렌더링 시 호출)
+   */
+  public updateOutlinePositions() {
+    this._selectedOutlineHelpers.forEach(({ outline, object }) => {
+      object.updateMatrixWorld(true);
+      outline.matrix.copy(object.matrixWorld);
+      // 외곽선을 약간 확대하여 오브젝트 외곽에 표시
+      outline.matrix.scale(new THREE.Vector3(1.01, 1.01, 1.01));
+    });
+  }
+
   public dispose() {
+    // Scene 구독 해제
+    if (this._sceneSelectionListener) {
+      this._scene.unsubscribe(this._sceneSelectionListener);
+    }
+
+    this.clearSelectedObjectOutlines();
     if (this._selectionBoxElement && this._selectionBoxElement.parentNode) {
       this._selectionBoxElement.parentNode.removeChild(this._selectionBoxElement);
     }

@@ -40,6 +40,8 @@ export class Scene extends THREE.Scene {
 
   private _listener: (() => void)[] = [];
 
+  public mixer: THREE.AnimationMixer | null = null;
+
   constructor(name: string) {
     super();
     const context = Context.getInstance();
@@ -249,8 +251,16 @@ export class Scene extends THREE.Scene {
 
     const box: THREE.Mesh = createMesh("Box") as THREE.Mesh;
     const box2: THREE.Mesh = createMesh("Box") as THREE.Mesh;
-    box.position.set(-1, 0, 0);
     box2.position.set(1, 0, 0);
+    // const track = new THREE.VectorKeyframeTrack(".position", [0, 2], [3, 3, 3, 6, 6, 6]);
+    // const clip = new THREE.AnimationClip("Animation Clip", 1, [track]);
+
+    // this.mixer = new THREE.AnimationMixer(box2);
+    // const action = this.mixer.clipAction(clip);
+    // action.play();
+
+    box.position.set(-1, 0, 0);
+
     this.add(box);
     this.add(box2);
     light.target = box;
@@ -366,6 +376,11 @@ export class Scene extends THREE.Scene {
   }
 
   public render = () => {
+    if (this.mixer) {
+      console.log("📢update mixer");
+      this.mixer.update(1 / 60);
+    }
+
     this._helpers.forEach((helper) => {
       helper.update();
     });

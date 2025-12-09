@@ -15,7 +15,7 @@ import { OrthographicControls } from "./orthographic-controls";
 import { DEFAULT_CAMERA_SPEC } from "../constants/camera";
 import { ViewHelper } from "./view-helper";
 import JEASINGS from "jeasings";
-import { progress } from "@/store/useProgress";
+import { progress } from "@/store/useProgressStore";
 import { Selector } from "./selector";
 
 export class Context {
@@ -60,6 +60,7 @@ export class Context {
 
     this._scenes = [scene, scene2];
     this._scene = scene;
+    this.notify(); // scenes가 설정되었음을 알림
     p.setProgress(30).setDescription("Scene을 설정하는 중입니다.");
 
     await new Promise((resolve) => setTimeout(resolve, 300));
@@ -121,6 +122,7 @@ export class Context {
 
   public addScene(scene: Scene) {
     this._scenes = [...this._scenes, scene];
+    this.notify(); // 새로운 scene이 추가되었음을 알림
   }
   get scenes() {
     return this._scenes;
@@ -278,6 +280,9 @@ export class Context {
       this._renderer.render(this._scene, this._scene.camera);
 
       this._scene.render();
+
+      // 외곽선 위치 업데이트 (오브젝트 이동/회전/스케일 변경 시 동기화)
+      this._selector?.updateOutlinePositions();
 
       this._controls?.render();
       this._renderer.render(this._scene.sceneHelper, this._scene.camera);

@@ -1,4 +1,11 @@
-import React, { useState, ComponentProps, useEffect, memo, useRef } from "react";
+import React, {
+  useState,
+  ComponentProps,
+  useEffect,
+  memo,
+  useRef,
+  useSyncExternalStore,
+} from "react";
 import * as THREE from "three";
 import { useEditor } from "@/hooks/useEditor";
 import { Scene } from "@/core/scene";
@@ -22,16 +29,25 @@ export const Hierarchy = memo(() => {
   const context = useEditor();
 
   const hierarchyRef = useRef<HTMLDivElement>(null);
-  const [scenes, setScenes] = useState<Scene[]>([]);
+
+  // useSyncExternalStore로 외부 Context의 scenes를 React에 동기화
+  // notify 패턴 없이도 React가 자동으로 감지하여 리렌더링합니다
+  const scenes = useSyncExternalStore(
+    (callback) => {
+      // subscribe: 외부 저장소 변경 시 callback 호출
+      const listener = () => callback();
+      context.subscribe(listener);
+      return () => context.unsubscribe(listener);
+    },
+    () => context.scenes || [], // getSnapshot: 현재 상태 반환
+    () => [], // getServerSnapshot: SSR용 (필요 없음)
+  );
+
   const [activeScene, setActiveScene] = useState<Scene>();
   const [select, setSelect] = useState<THREE.Object3D[]>([]);
   const [activeCamera, setActiveCamera] = useState<THREE.Camera>(
     context.scene?.registedCamera as THREE.Camera,
   );
-
-  useEffect(() => {
-    setScenes(context.scenes);
-  }, [context.scene]);
 
   const handleClickSelect = (event: React.MouseEvent<HTMLDivElement>, object: THREE.Object3D) => {
     event.stopPropagation();
@@ -68,6 +84,7 @@ export const Hierarchy = memo(() => {
   };
 
   const contextListener = () => {
+    // scenes는 useSyncExternalStore가 자동으로 처리하므로 여기서는 scene 관련만 업데이트
     if (!context.scene) {
       return;
     }
