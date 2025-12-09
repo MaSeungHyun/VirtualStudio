@@ -7,6 +7,8 @@ import * as THREE from "three";
 
 type ViewportShadingDropdownProps = {
   children: React.ReactNode;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };
 
 const SHADE_TYPE = {
@@ -21,7 +23,11 @@ const SHADE_TYPE = {
 
 type ShadeType = (typeof SHADE_TYPE)[keyof typeof SHADE_TYPE];
 
-export default function ViewportShadingDropdown({ children }: ViewportShadingDropdownProps) {
+export default function ViewportShadingDropdown({
+  children,
+  open,
+  onOpenChange,
+}: ViewportShadingDropdownProps) {
   const { scene } = useEditor();
   const [viewportShading, setViewportShading] = useState<ShadeType>(SHADE_TYPE.Solid);
   const previousMaterialRef = useRef<THREE.Material | null>(null);
@@ -101,15 +107,19 @@ export default function ViewportShadingDropdown({ children }: ViewportShadingDro
   };
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root open={open} onOpenChange={onOpenChange}>
       <DropdownMenu.Trigger>{children}</DropdownMenu.Trigger>
-      <DropdownMenu.Content>
+      <DropdownMenu.Content autoClose={false}>
         <DropdownMenu.RadioGroup
           value={viewportShading}
           onValueChange={(value) => handleChangeViewportShading(value as ShadeType)}
         >
           {Object.values(SHADE_TYPE).map((type) => (
-            <DropdownMenu.RadioItem key={type} value={type}>
+            <DropdownMenu.RadioItem
+              key={type}
+              value={type}
+              className={cn("text-gc-gray-300", viewportShading === type && "text-gc-gray-100")}
+            >
               <DropdownMenu.ItemIndicator>
                 <Icon
                   icon="Check"
@@ -118,7 +128,7 @@ export default function ViewportShadingDropdown({ children }: ViewportShadingDro
                 />
               </DropdownMenu.ItemIndicator>
               <Icon icon="Eclipse" size={15} className={cn("mr-1.5")} />{" "}
-              {type.charAt(0).toUpperCase() + type.slice(1)}
+              <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
             </DropdownMenu.RadioItem>
           ))}
         </DropdownMenu.RadioGroup>

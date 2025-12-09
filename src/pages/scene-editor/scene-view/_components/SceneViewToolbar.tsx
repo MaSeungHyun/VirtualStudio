@@ -9,6 +9,12 @@ function SceneViewToolbar() {
   const context = useEditor();
   const [hdr, setHdr] = useState(true);
 
+  const [viewportShading, setViewportShading] = useState(false);
+
+  const handleClickViewportShading = () => {
+    setViewportShading(!viewportShading);
+  };
+
   const handleClickChange2DView = () => {
     context.scene!.change2DView();
   };
@@ -63,9 +69,15 @@ function SceneViewToolbar() {
         <Toolbar.Item shape="rect" size="md" className="w-8">
           <Icon icon="Video" className="h-4 w-4" />
         </Toolbar.Item>
-        <ViewportShadingDropdown>
-          <Toolbar.Item shape="rect" size="md" className="w-8">
-            <Icon icon="Grid" className="h-4 w-4" />
+        <ViewportShadingDropdown open={viewportShading} onOpenChange={setViewportShading}>
+          <Toolbar.Item
+            shape="rect"
+            size="md"
+            className="w-8"
+            selected={viewportShading}
+            onClick={handleClickViewportShading}
+          >
+            <Icon icon="Grid3x3" className="h-4 w-4" />
           </Toolbar.Item>
         </ViewportShadingDropdown>
         <Toolbar.Item shape="rect" size="md" className="w-8" onClick={handleClickShowHDR}>

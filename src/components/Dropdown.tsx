@@ -13,8 +13,8 @@ const DropdownMenuSub = DropdownPrimitive.Sub;
 
 const DropdownMenuContent = forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Content>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Content> & { autoClose?: boolean }
+>(({ className, autoClose = true, ...props }, ref) => (
   <DropdownMenuPortal>
     <DropdownPrimitive.Content
       ref={ref}
@@ -72,9 +72,6 @@ const DropdownMenuSubTrigger = forwardRef<
     {...props}
   >
     {children}
-    <div className="text-mauve11 group-data-[disabled]:text-mauve8 ml-auto pl-5 group-data-[highlighted]:text-white">
-      <Icon icon="ChevronRight" />
-    </div>
   </DropdownPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = DropdownPrimitive.SubTrigger.displayName;

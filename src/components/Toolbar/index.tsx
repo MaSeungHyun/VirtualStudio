@@ -26,7 +26,7 @@ function ToolbarGroup({ className, children }: ToolMenuProps) {
 }
 
 const toolMenuVariants = cva(
-  "bg-black-200 hover:bg-blue-300/50 cursor-pointer items-center justify-center flex text-gray-50 p-1 border-1 border-black-500 ",
+  "bg-black-200 hover:bg-gc-cyan-500 cursor-pointer items-center justify-center flex text-gray-50 p-1 border-1 border-black-500 ",
   {
     variants: {
       shape: {
@@ -62,7 +62,7 @@ function ToolbarItem({ shape, size, className, children, selected, ...props }: T
           shape: shape,
           size: size,
         }),
-        selected && "border-1 border-blue-300 bg-blue-500 text-white",
+        selected && "bg-gc-cyan-500 border-1 border-cyan-400 text-white",
         className,
       )}
       {...props}
