@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH } from "./constant/window";
+import { registerAllHandlers } from "./ipc";
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -30,6 +31,11 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 let win: BrowserWindow | null;
 
 function createWindow() {
+  const isMac = process.platform === "darwin";
+  const isWindow = process.platform === "win32";
+  const isLinux = process.platform === "linux";
+
+  const titleBarStyle = isMac ? "hiddenInset" : isWindow ? "hidden" : "default";
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
@@ -37,7 +43,21 @@ function createWindow() {
     },
     width: DEFAULT_WINDOW_WIDTH,
     height: DEFAULT_WINDOW_HEIGHT,
-    autoHideMenuBar: true,
+    frame: false,
+    titleBarStyle: titleBarStyle,
+    backgroundColor: "#242424",
+    titleBarOverlay:
+      isWindow || isLinux
+        ? {
+            color: "#242424",
+            symbolColor: "#f0f0f0",
+            height: 30,
+          }
+        : undefined,
+  });
+
+  app.whenReady().then(() => {
+    registerAllHandlers(() => win);
   });
 
   // Test active push message to Renderer-process.

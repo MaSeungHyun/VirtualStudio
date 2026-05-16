@@ -3,29 +3,111 @@ import { createMesh } from "../core/mesh";
 
 export interface MenuItem {
   label: string;
-  icon: string;
+  icon?: string;
   subMenu?: MenuItem[];
   callback?: () => void;
   shortcut?: string;
 }
-export const SCENE_VIEW_HEADER_MENU_ITEMS: MenuItem[] = [
+export const EDITOR_MENU_ITEMS: MenuItem[] = [
   {
     label: "File",
     icon: "File",
     subMenu: [
       {
-        label: "New",
-        icon: "File",
+        label: "Import",
+        icon: "Import",
         callback: () => {
-          // createMesh("box");
+          console.log("Import");
+        },
+        subMenu: [
+          {
+            label: "*.psd",
+            callback: () => {
+              console.log("Import");
+            },
+          },
+          {
+            label: "seperate",
+            icon: "seperate",
+          },
+          {
+            label: "*.glb",
+            callback: () => {
+              console.log("Import");
+            },
+          },
+          {
+            label: "*.gltf",
+            callback: () => {
+              console.log("Import");
+            },
+          },
+          {
+            label: "*.fbx",
+            callback: () => {
+              console.log("Import");
+            },
+          },
+          {
+            label: "*.obj",
+            callback: () => {
+              console.log("Import");
+            },
+          },
+        ],
+      },
+      {
+        label: "Export",
+        icon: "Upload",
+        callback: () => {
+          console.log("Export");
+        },
+      },
+      {
+        label: "seperate",
+        icon: "seperate",
+      },
+      {
+        label: "Save",
+        icon: "Save",
+        callback: () => {
+          console.log("Save");
+        },
+      },
+      {
+        label: "seperate",
+        icon: "seperate",
+      },
+      {
+        label: "Exit",
+        icon: "LogOut",
+        callback: () => {
+          console.log("Exit");
         },
       },
     ],
   },
+
   {
     label: "Edit",
     icon: "Edit",
-    subMenu: [],
+    subMenu: [
+      {
+        label: "Undo",
+        icon: "Undo",
+        callback: () => {
+          console.log("Undo");
+        },
+      },
+
+      {
+        label: "Redo",
+        icon: "Redo",
+        callback: () => {
+          console.log("Redo");
+        },
+      },
+    ],
   },
   {
     label: "Render",
