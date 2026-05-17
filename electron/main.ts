@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import { DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH } from "./constant/window";
 import { registerAllHandlers } from "./ipc";
-import { showSplash } from "./splash";
+import { closeSplashWhenReady, openSplash } from "./splash";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -30,12 +30,13 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 
 let win: BrowserWindow | null;
 
-function createWindow() {
-  const isMac = process.platform === "darwin";
-  const isWindow = process.platform === "win32";
-  const isLinux = process.platform === "linux";
+const isMac = process.platform === "darwin";
+const isWindow = process.platform === "win32";
+const isLinux = process.platform === "linux";
 
-  const titleBarStyle = isMac ? "hiddenInset" : isWindow ? "hidden" : "default";
+const titleBarStyle = isMac ? "hiddenInset" : isWindow ? "hidden" : "default";
+
+function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC!, "electron-vite.svg"),
     webPreferences: {
@@ -74,7 +75,13 @@ async function launchApp() {
   registerAllHandlers(() => win);
 
   const mainWindow = createWindow();
-  await showSplash(process.env.VITE_PUBLIC!);
+  const splashWindow = await openSplash({
+    rendererDist: RENDERER_DIST,
+    publicDir: process.env.VITE_PUBLIC!,
+    devServerUrl: VITE_DEV_SERVER_URL,
+  });
+
+  await closeSplashWhenReady(splashWindow, mainWindow);
 
   if (mainWindow.isDestroyed()) {
     return;
